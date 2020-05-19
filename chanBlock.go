@@ -18,6 +18,7 @@ func main() {
 
 	// 示例2
 	channel := make(chan int, 3)
+	//写通道
 	channel <- 1
 	channel <- 2
 	channel <- 3
@@ -26,21 +27,22 @@ func main() {
 	//只有三个通道变量，已经写满， 在读取之前继续写会阻塞
 	//channel <- 4
 
-	fmt.Printf("the first channel value is %v\n", <-channel)
+	fmt.Printf("Outsize write the first channel value is %v\n", <-channel)
+	//读通道
 	v := <-channel
-	fmt.Printf("the first channel value is %v\n", v)
-	fmt.Printf("the first channel value is %v\n", <-channel)
+	fmt.Printf("Outsize write the first channel value is %v\n", v)
+	fmt.Printf("Outsize write the first channel value is %v\n", <-channel)
 
 	//3个通道变量已经全部被读取， 继续读会阻塞
 	// 报错2：fatal error: all goroutines are asleep - deadlock!
 	//fmt.Printf("the first channel value is %v\n",<-channel)
 
-	// 示例3
+	// 示例3 goroutine sleep, 等待主进程写入， sleep时间过后读取写入的数据
 	channel2 := make(chan int, 0)
 	go func() {
 		time.Sleep(time.Second * 5)
 		v := <-channel2
-		fmt.Printf("the value is %v\n", v)
+		fmt.Printf("In goroutine read the value is %v\n", v)
 	}()
 	channel2 <- 1
 	fmt.Print("the time is over\n")
