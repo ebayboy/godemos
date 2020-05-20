@@ -7,6 +7,9 @@ func main() {
 	//生命切片
 	s := make([]string, 5)
 
+	fmt.Println("len:", len(s))
+	fmt.Println("cap:", cap(s))
+
 	//初始化
 	for n := 0; n < len(s); n++ {
 		s[n] = fmt.Sprintf("name_%d", n)
