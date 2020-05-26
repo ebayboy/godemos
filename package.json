@@ -1,0 +1,118 @@
+{
+  "debug": true,
+  "input": {
+    "type": "split",
+    "cols": [
+      "ts",
+      "host",
+      "grpID",
+      "ip",
+      "uri",
+      "status",
+      "byt"
+    ],
+    "split": "#-"
+  },
+  "stats": [
+    {
+      "groupby": [
+        "grpID",
+        "host",
+        "ip",
+        "STR(ts, MINU)"
+      ],
+      "select": [
+        "STR(ts, MINU)",
+        "grpID",
+        "host",
+        "ip",
+        "COUNT(status, BASE64|S4xx) AS t_4xx",
+        "COUNT(status, BASE64|S5xx) AS t_5xx",
+        "COUNT(uri, SUFFIX..html) AS t_html",
+        "SUM(byt) AS s_byt",
+        "COUNT(status, ANY) AS total",
+        "COUNT(uri, DISC) AS freq_uri"
+      ],
+      "from": "input"
+    },
+    {
+      "groupby": [
+        "grpID",
+        "host",
+        "STR(ts, MINU)"
+      ],
+      "select": [
+        "COUNT(host, ANY) AS t_host"
+      ],
+      "from": "input"
+    }
+  ],
+  "outputs": [
+    {
+      "format": {
+        "cols": [
+          "ts",
+          "grpID",
+          "host",
+          "ip",
+          "t_4xx",
+          "t_5xx",
+          "t_html",
+          "s_byt",
+          "freq_uri",
+          "total"
+        ],
+        "split": " "
+      },
+      "hash": true,
+      "//": "同一个hashkey是否hash到同一台redis上面",
+      "redis": [
+        {
+          "addr": "127.0.0.1:6379",
+          "DB": 4,
+          "hash": true,
+          "//": "同一个hashkey是否hash到同一台list上面",
+          "list": [
+            "list_01",
+            "list_02"
+          ]
+        },
+        {
+          "addr": "127.0.0.1:6379",
+          "DB": 5,
+          "hash": true,
+          "list": [
+            "list_01",
+            "list_02"
+          ]
+        }
+      ]
+    },
+    {
+      "format": {
+        "cols": [
+          "t_host"
+        ],
+        "split": " "
+      },
+      "redis": [
+        {
+          "addr": "127.0.0.1:6379",
+          "DB": 4,
+          "list": [
+            "list_01",
+            "list_02"
+          ]
+        },
+        {
+          "addr": "127.0.0.1:6379",
+          "DB": 5,
+          "list": [
+            "list_01",
+            "list_02"
+          ]
+        }
+      ]
+    }
+  ]
+}
