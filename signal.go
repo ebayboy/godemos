@@ -10,6 +10,7 @@ import (
 
 // 优雅退出go守护进程
 func main() {
+
 	//创建监听退出chan
 	c := make(chan os.Signal)
 	//监听指定信号 ctrl+c kill
@@ -18,7 +19,7 @@ func main() {
 		for s := range c {
 			switch s {
 			case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
-				fmt.Println("退出", s)
+				fmt.Println("Stop", s)
 				ExitFunc()
 			case syscall.SIGUSR1:
 				fmt.Println("usr1", s)
@@ -30,7 +31,7 @@ func main() {
 		}
 	}()
 
-	fmt.Println("进程启动...")
+	fmt.Println("Start...")
 	sum := 0
 	for {
 		sum++
@@ -40,8 +41,11 @@ func main() {
 }
 
 func ExitFunc() {
-	fmt.Println("开始退出...")
-	fmt.Println("执行清理...")
-	fmt.Println("结束退出...")
+	fmt.Println("Stopping...")
+
+	fmt.Println("Cleanning...")
+
+	fmt.Println("Stopped!!!")
+
 	os.Exit(0)
 }
