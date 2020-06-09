@@ -1,9 +1,22 @@
 {
   "addr": "27017",
-  "mongo": {
-    "mongoAddr": "127.0.0.1",
-    "mongoPoolLimit": 500,
-    "mongoDb": "benben_2015",
-    "mongoCol": "test"
-  }
+  "input": [
+    "111",
+    "222",
+    "333"
+  ],
+  "mongo": [
+    {
+      "mongoAddr": "127.0.0.1",
+      "mongoPoolLimit": 500,
+      "mongoDb": "benben_2015",
+      "mongoCol": "test"
+    },
+    {
+      "mongoAddr": "127.0.0.1",
+      "mongoPoolLimit": 501,
+      "mongoDb": "benben_2016",
+      "mongoCol": "test1"
+    }
+  ]
 }

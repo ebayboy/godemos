@@ -10,13 +10,14 @@ import (
 type MongoConfig struct {
 	MongoAddr      string
 	MongoPoolLimit int
-	MongoDb        string
+	MongoDb        string `mongoAddr`
 	MongoCol       string
 }
 
 type Config struct {
 	Addr  string
-	Mongo MongoConfig
+	Input []string      `json:"input"`
+	Mongo []MongoConfig `json:"mongo"`
 }
 
 func main() {
@@ -24,8 +25,16 @@ func main() {
 	v := Config{}
 	//下面使用的是相对路径，config.json文件和main.go文件处于同一目录下
 	JsonParse.Load("./loadjson.json", &v)
-	fmt.Println(v.Addr)
-	fmt.Println(v.Mongo.MongoDb)
+	fmt.Println("Addr:", v.Addr)
+
+	for _, s := range v.Input {
+		fmt.Println("input:", s)
+	}
+	for i, mongo := range v.Mongo {
+		fmt.Println("index:", i)
+		fmt.Println("Mongo:", mongo)
+	}
+	fmt.Println("Mongo:")
 }
 
 type JsonStruct struct {
