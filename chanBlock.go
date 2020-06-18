@@ -14,6 +14,12 @@ import (
 ：第二个bool值为false,则通道肯定关闭了，值为true,可能关闭也可能没有关闭
 */
 
+func test(chan channel2) {
+	time.Sleep(time.Second * 5)
+	v := <-channel2
+	fmt.Printf("In goroutine read the value is %v\n", v)
+}
+
 func main() {
 
 	// 示例2

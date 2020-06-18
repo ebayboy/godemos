@@ -16,7 +16,7 @@ func main() {
 	fmt.Println("len:", len(countryCapitalMap))
 
 	for key, value := range countryCapitalMap {
-		fmt.Println(key, "Capital is", value)
+		fmt.Println("key:", key, " value:", value)
 	}
 
 	//检查元素是否在map中

@@ -1,21 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"strings"
+	"log"
+	"os"
 )
 
-func hello(name string) {
-	fmt.Println("hello", name)
-}
+var debugLog *log.Logger
 
 func main() {
-	str := "GT(vGID_vSNM_vIP_count_404_5m/vGID_vSNM_vIP_count_5m, 0.5)"
-	str = strings.ReplaceAll(str, "vGID_vSNM_vIP_count_404_5m", "%v")
-	str = strings.ReplaceAll(str, "vGID_vSNM_vIP_count_5m", "%v")
 
-	fmt.Println("str:", str)
-	newStr := fmt.Sprintf(str, 100, 200)
-	fmt.Println("newStr", newStr)
+	debug := false
+	if debug {
+		debugLog = log.New(os.Stdout, "[Debug]", log.Llongfile)
+	} else {
+		logFile, err := os.Create("/dev/null")
+		if err != nil {
+			log.Fatalln("open file error !")
+		}
+		debugLog = log.New(logFile, "[Debug]", log.Llongfile)
+		defer logFile.Close()
+	}
+
+	debugLog.Println("A debug message here")
 
 }
