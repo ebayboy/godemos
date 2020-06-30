@@ -1,96 +1,86 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
-	"reflect"
+	"strconv"
 	"strings"
 )
 
-type ControllerMapsType map[string]reflect.Value
+func GetTSKeys(hkeys []string, split string, tsNow int, tsWin int) []string {
+	keys := make([]string, tsWin)
 
-var ControllerMaps ControllerMapsType
-
-type Routers struct {
-}
-
-func (this *Routers) AND(data ...interface{}) {
-	rules := data[0].([]bool)
-	ret := data[1].(*bool)
-	for _, rule := range rules {
-		*ret = *ret && rule
+	for i := 0; i < tsWin; i++ {
+		keys[i] = strings.Join(hkeys, split)
+		keys[i] += split
+		keys[i] = fmt.Sprintf("%s%d", keys[i], tsNow-60*(i+1))
 	}
-	log.Println("AND data:", data, " ret:", ret)
+
+	return keys
 }
 
-func (this *Routers) OR(data ...interface{}) {
-	rules := data[0].([]bool)
-	ret := data[1].(*bool)
+func RiskMsgParse(redisRes map[string]string, split string, cfgCols []string) (map[string]map[string]int, error) {
+	outRes := make(map[string]map[string]int, len(redisRes))
+	var err error
+	for key, value := range redisRes {
+		log.Println("split key:", key)
+		m := make(map[string]int)
+		outRes[key] = m
+		vals := strings.Split(value, split)
+		if len(vals) != len(cfgCols) {
+			log.Printf("Redis values[%s] not match cols:[%s]\n", value, cfgCols)
+			return nil, errors.New("Redis values not match cols number.")
+		}
 
-	for _, rule := range rules {
-		*ret = *ret || rule
+		for i := 0; i < len(cfgCols); i++ {
+			m[cfgCols[i]], err = strconv.Atoi(vals[i])
+			if err != nil {
+				return nil, errors.New("Parse error.")
+			}
+		}
 	}
-	log.Println("OR data:", data, " ret:", ret)
+
+	log.Println("outRes:", outRes)
+
+	return outRes, nil
 }
 
-func (this *Routers) NOT(data ...interface{}) {
-	rules := data[0].([]bool)
-	ret := data[1].(*bool)
+//@keysRes: map[string]string
+//"1.1.1.1" : "11|00|31|41|51|61|71"
+//"2.2.2.2" : "11|00|31|41|51|61|71"
+//@keys: []string {"grp00_t.com_1590977400", "grp00_t.com_1590977340"}
+//@output format:
+//map{
+//"grp00_t.com_1590977400" : {"1.1.1.1":map{"ip_total":50, "disc_uri": 33, "2.2.2.2":map{"ip_total":50, "disc_uri": 33},
+//"grp00_t.com_1590977340" : {"3.3.3.3":map{"ip_total":55, "disc_uri": 22, "4.4.4.4":map{"ip_total":55, "disc_uri": 22}
+//}
+func keysResConvMap(keys []string, keysRes []map[string]string) (map[string]map[string]map[string]int, error) {
+	res := make(map[string]map[string]map[string]int)
 
-	*ret = !rules[0]
-	log.Println("NOT data:", data, " ret:", ret)
-}
-
-var LogicComputer ControllerMapsType
-
-func init() {
-	var ruTest Routers
-
-	LogicComputer = make(ControllerMapsType, 0)
-	//创建反射变量，注意这里需要传入ruTest变量的地址；
-	//不传入地址就只能反射Routers静态定义的方法
-	vf := reflect.ValueOf(&ruTest)
-	vft := vf.Type()
-	//读取方法数量
-	mNum := vf.NumMethod()
-	fmt.Println("NumMethod:", mNum)
-	//遍历路由器的方法，并将其存入控制器映射变量中
-	for i := 0; i < mNum; i++ {
-		mName := vft.Method(i).Name
-		fmt.Println("index:", i, " MethodName:", mName)
-		LogicComputer[mName] = vf.Method(i) //<<<
+	for i := 0; i < len(keys); i++ {
+		//map[string]map[string]string -> map[string]map[string]int
+		rowRes, err := RiskMsgParse(keysRes[i], "|", []string{"total", "disc_uri"})
+		if err != nil {
+			log.Println("Error:", err.Error())
+			return nil, err
+		}
+		res[keys[i]] = rowRes
 	}
+
+	return res, nil
 }
 
 func main() {
-	var ret bool = false
-	//演示
-	rules := []bool{true, false, true, false}
-	//创建带调用方法时需要传入的参数列表
-	parms := []reflect.Value{reflect.ValueOf(rules), reflect.ValueOf(&ret)}
+	// 1.1.1.1 total:10
+	// 1.1.1.1 dist_uri:5
+	// 2.2.2.2 total:10
+	// all : total:10
+	m := make(map[string]map[string]float64)
+	m["grpid_host_1.1.1.1"] = map[string]float64{"total": 10, "dist_uri": 5}
+	m["grpid_host_2.2.2.2"] = map[string]float64{"total": 10}
 
-	//使用方法名字符串调用指定方法
-	f, ok := LogicComputer[strings.ToUpper("and")]
-	if ok {
-		f.Call(parms)
-		log.Println(ret)
-	} else {
-		log.Println("not exist and func!!!")
-	}
-
-	f, ok = LogicComputer[strings.ToUpper("or")]
-	if ok {
-		f.Call(parms)
-		log.Println(ret)
-	} else {
-		log.Println("or exist and func!!!")
-	}
-
-	f, ok = LogicComputer[strings.ToUpper("not")]
-	if ok {
-		f.Call(parms)
-		log.Println(ret)
-	} else {
-		log.Println("not exist and func!!!")
+	for s2, m2 := range m {
+		log.Println(s2, ":", m2)
 	}
 }
