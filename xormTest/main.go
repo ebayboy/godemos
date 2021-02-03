@@ -11,13 +11,28 @@ import (
 
 var engine *xorm.Engine
 
+type Groupp struct {
+	Id   int64
+	Name string
+}
+
 type User struct {
 	Id       int64
 	Name     string
 	Age      int64
+	GroupId  int64
 	CreateAt int64     `xorm:"created"`
 	DeleteAt time.Time `xorm:"deleted"`
 	UpdateAt int64     `xorm:"updated"`
+}
+
+type UserGroup struct {
+	User   `xorm:"extends"`
+	Groupp `xorm:"extends"`
+}
+
+func (UserGroup) TableName() string {
+	return "user"
 }
 
 func main() {
@@ -148,6 +163,54 @@ func main() {
 		glog.Fatal("Error:", err7.Error())
 	}
 	glog.Info("Where:", res7)
+
+	//Get
+	ug := User{
+		Name: "rose",
+	}
+	ok, err8 := session.Desc("name").Limit(1, 0).Get(&ug)
+	if err8 != nil {
+		session.Rollback()
+		glog.Fatal("Error:", err.Error())
+	}
+	glog.Info("Get ok:", ok, " ug:", ug)
+
+	//Find
+	users := make([]User, 0)
+	err9 := session.Find(&users)
+	if err9 != nil {
+		session.Rollback()
+		glog.Fatal("Error:", err9.Error())
+	}
+	for _, v := range users {
+		glog.Info("Find user:", v)
+	}
+
+	users2 := make(map[int64]User)
+	err10 := session.Find(&users2)
+	if err10 != nil {
+		session.Rollback()
+		glog.Error("Error: find2 ", err10.Error())
+	}
+	for _, v := range users2 {
+		glog.Info("find2 user:", v)
+	}
+
+	//inner join
+	ugs := make([]UserGroup, 0)
+	session.Join("INNER", "groupp", "groupp.id = user.group_id").Find(&ugs)
+	glog.Info("ugs size:", len(ugs))
+
+	//count
+	uc := User{
+		Name: "rose",
+	}
+	total, err11 := session.Count(&uc)
+	if err11 != nil {
+		session.Rollback()
+		glog.Fatal("Error count:", err.Error())
+	}
+	glog.Info("Count:", total)
 
 	session.Commit()
 }
