@@ -1,0 +1,19 @@
+!_TAG_FILE_FORMAT	2
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted/
+!_TAG_PROGRAM_AUTHOR	Joel Stemmer	/stemmertech@gmail.com/
+!_TAG_PROGRAM_NAME	gotags
+!_TAG_PROGRAM_URL	https://github.com/jstemmer/gotags
+!_TAG_PROGRAM_VERSION	1.4.1	/go1.15.7/
+Age	main.go	15;"	w	access:public	ctype:User	line:15	type:int64
+CreateAt	main.go	16;"	w	access:public	ctype:User	line:16	type:int64
+DeletedAt	main.go	17;"	w	access:public	ctype:User	line:17	type:time.Time
+Id	main.go	13;"	w	access:public	ctype:User	line:13	type:int64
+Name	main.go	14;"	w	access:public	ctype:User	line:14	type:string
+User	main.go	12;"	t	access:public	line:12	type:struct
+engine	main.go	10;"	v	access:private	line:10	type:*xorm.Engine
+github.com/go-sql-driver/mysql	main.go	4;"	i	line:4
+github.com/go-xorm/xorm	main.go	5;"	i	line:5
+github.com/golang/glog	main.go	6;"	i	line:6
+main	main.go	1;"	p	line:1
+main	main.go	20;"	f	access:private	line:20	signature:()
+xorm.io/core	main.go	7;"	i	line:7
