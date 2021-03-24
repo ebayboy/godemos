@@ -1,5 +1,8 @@
 package main
 
+//test xorm map
+//test glog rotate
+
 import (
 	"time"
 
@@ -16,11 +19,18 @@ type Groupp struct {
 	Name string
 }
 
+//{"denyAction":{"atOp":1,"atVal":"default"},"skipAction":null}
+type AtCfg struct {
+	Name string
+	Age  int
+}
+
 type User struct {
 	Id       int64
 	Name     string
 	Age      int64
 	GroupId  int64
+	Action   []AtCfg   `xorm:"action",json:"atCfg,omitempty"`
 	CreateAt int64     `xorm:"created"`
 	DeleteAt time.Time `xorm:"deleted"`
 	UpdateAt int64     `xorm:"updated"`
@@ -43,41 +53,27 @@ func main() {
 		return
 	}
 	defer engine.Close()
-
 	engine.SetColumnMapper(core.SnakeMapper{})
-
-	u := User{}
-	tbl := engine.TableInfo(&u)
-	glog.Info("tbl:", tbl)
-
-	tbName := engine.TableName(&u)
-	glog.Info("name:", tbName)
-
-	dbMetas, err1 := engine.DBMetas()
-	if err1 != nil {
-		glog.Error("Error:", err1.Error())
-		return
-	}
-	glog.Info("dbMetas:", dbMetas)
-
-	for k, v := range dbMetas {
-		glog.Info(k, ":", v)
-	}
-
-	u1 := User{
-		Name: "rose",
-		Age:  33,
-	}
 
 	//Session  transaction
 	session := engine.NewSession()
 	defer session.Close()
 	session.Begin()
 
-	//inner join
-	ugs := make([]UserGroup, 0)
-	session.Join("INNER", "groupp", "groupp.id = user.group_id").Find(&ugs)
-	glog.Info("ugs size:", len(ugs))
+	u1 := User{
+		Name: "fanpf",
+	}
+	if _, err := session.Get(&u1); err != nil {
+		glog.Error("error:", err)
+	} else {
+		glog.Info("u:", u1)
+	}
+
+	for _, v := range u1.Action {
+		glog.Info("name", v.Name)
+	}
+
+	//
 
 	session.Commit()
 }
