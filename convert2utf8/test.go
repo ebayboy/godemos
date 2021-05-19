@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/axgle/mahonia"
-	"github.com/saintfish/chardet"
 	"io"
 	"os"
+
+	"github.com/axgle/mahonia"
+	"github.com/saintfish/chardet"
 )
 
 /*
@@ -24,12 +25,19 @@ func Str2UTF8(src string, datautf8 string) error {
 		"UTF-8":      "utf8",
 		"ISO-8859-1": "ISO-8859-1",
 		"GB-18030":   "gb18030",
+		"Big5":       "big5",
 	}
 
 	detector := chardet.NewTextDetector()
 	charset, err := detector.DetectBest([]byte(src))
 	if err != nil {
+		fmt.Println("continue utf8!")
 		return err
+	}
+
+	if charset.Charset == "UTF-8" {
+		datautf8 = src
+		return nil
 	}
 
 	decCharset, exist := chardet_to_chardet[charset.Charset]
@@ -54,6 +62,7 @@ func main() {
 	//utf-8.txt
 
 	f, err := os.Open("./8859-1.txt")
+	//f, err := os.Open("./utf8.html")
 	if err != nil {
 		panic(err)
 	}
