@@ -9,3 +9,4 @@ func main() {
 	fmt.Println("hlll")
 	log.Println("hlll")
 }
+
