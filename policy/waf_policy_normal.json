@@ -60,7 +60,7 @@
  			{
  				"id": "21",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_args_value",
- 				"rx": "(java\\.lang\\.ProcessBuilder\\b|java\\.lang\\.Runtime\\b|java\\.lang\\.System\\b|class\\.classLoader\\b|class\\['classLoader'\\]|java\\.lang\\.Shutdown\\b|javax\\.script\\.ScriptEngineManager\\b|ognl\\.OgnlContext\\b|ognl\\.MemberAccess\\b|ognl\\.ClassResolver\\b|ognl\\.TypeConverter\\b|com\\.opensymphony\\.xwork2\\.ActionContext\\b|_memberAccess\\b|java\\.io\\.File\\b)"
+ 				"rx": "(java\\.lang\\.AutoCloseable\\b|java\\.lang\\.ProcessBuilder\\b|java\\.lang\\.Runtime\\b|java\\.lang\\.System\\b|class\\.classLoader\\b|class\\['classLoader'\\]|java\\.lang\\.Shutdown\\b|javax\\.script\\.ScriptEngineManager\\b|ognl\\.OgnlContext\\b|ognl\\.MemberAccess\\b|ognl\\.ClassResolver\\b|ognl\\.TypeConverter\\b|com\\.opensymphony\\.xwork2\\.ActionContext\\b|_memberAccess\\b|java\\.io\\.File\\b)"
  			},
  			{
  				"id": "22",
@@ -520,783 +520,778 @@
  			{
  				"id": "111",
  				"mz": "$u_post_value",
- 				"rx": "(\u003c|\u003c[\\x20-\\x80\\s]{1,40}[^\\|\\/\\(])(\\becmascript:|\\bjavascript\\b|vbscript:|data:text/html)([^v]|v([^o]|o([^i]|i[^d])))(.{0,28}[=\u003c\u003e\"]){2}"
- 			},
- 			{
- 				"id": "112",
- 				"mz": "$u_post_value",
  				"rx": "^.{0,20}\u003c[a-zA-Z]+(?:/|\\\\s*)[^\u0026\u003c]+=[^\u0026\u003c]+(?:(?:java|vb)script|data):[^\u0026\u003e]"
  			},
  			{
- 				"id": "113",
+ 				"id": "112",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_get_value,$u_cookie_value",
  				"rx": "UNION[^\\r\\n]{0,20}ALL[^\\r\\n]{0,20}SELECT[^\\r\\n]{0,20}NULL[^\\r\\n]{0,20}\u003cscript\u003ealert\\(\"XSS\"\\)\u003c\\/script\u003e[^\\r\\n]{0,20}table_name[^\\r\\n]{0,20}FROM[^\\r\\n]{0,20}information_schema.tables[^\\r\\n]{0,20}WHERE[^\\r\\n]{0,20}EXEC[^\\r\\n]{0,20}xp_cmdshell\\("
  			},
  			{
- 				"id": "114",
+ 				"id": "113",
  				"mz": "$u_request_uri,$request_uri_path,$u_request_uri_path",
  				"rx": "((%c0%ae|\\\\xc0\\\\xae|\\.|%u002e){2}(%c0%af|\\\\xC0\\\\xAF|\\/|%c1%9c|\\\\xc1\\\\x9c|\\\\|%u2215|%u2216|%255c|%252f)){2}"
  			},
  			{
- 				"id": "115",
+ 				"id": "114",
  				"mz": "$u_request_uri,$u_uri",
  				"rx": "\\/upgrade_handle\\.php\\?(uploaddir='(\\|\\|[^\\r\\n\u0026]+\\|\\||;[^\\r\\n\u0026]+;)'\u0026cmd=writeuploaddir|cmd=writeuploaddir\u0026uploaddir='(\\|\\|[^\\r\\n\u0026]+\\|\\||;[^\\r\\n\u0026]+;)')"
  			},
  			{
- 				"id": "116",
+ 				"id": "115",
  				"mz": "$u_request_uri,$u_uri",
  				"rx": "\\?(.*\u0026)?s=[^\u0026]{0,240}(\\x2f(\\x5c+\\x5c?(x5c)?)?|\\||\\\\)think\\x5c(x5c)?[^\u0026]{1,50}\\x2f"
  			},
  			{
- 				"id": "117",
+ 				"id": "116",
  				"mz": "$u_args_value,$u_request_headers",
  				"rx": "(\\bwget\\b[\\s\\+]+([^\\r\\n\u0026]{1,150}[\\s\\+])?https?://(\\d{1,3}\\.){3}\\d{1,3}/[^\\r\\n]+;[^\\r\\n]{0,200}\\b(chmod\\b[\\s\\+]|rm\\b(\\s+|\\s*\\$.{1,50})-rf\\b)|\\b(chmod\\b[\\s\\+]|rm\\b(\\s+|\\s*\\$.{1,50})-rf)\\b.{1,300}\\bwget\\b[\\s\\+\\$]+([^\\r\\n\u0026]{1,150}[\\s\\+]?)?https?://(\\d{1,3}\\.){3}\\d{1,3})"
  			},
  			{
- 				"id": "118",
+ 				"id": "117",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "^\u003c\\?xml\\s[\\s\\S]{0,200}\u003c\\w+:Envelope\\b[\\s\\S]{50,500}\u003c\\w{1,340}:Upgrade\\b.{20,400}\u003cNewStatusURL\u003e\\$\\s*\\([^)]*[\\s|\\+]wget[\\s|\\+].{1,400}\u003c\\/NewStatusURL\u003e[\\s\\S]*\u003cNewDownloadURL\u003e\\$"
  			},
  			{
- 				"id": "119",
+ 				"id": "118",
  				"mz": "$u_request_uri,$u_uri",
  				"rx": "/cgi-bin/nobody/Search\\.cgi\\?.{0,150}\\busername\\s*=\\s*\\w{1,20}\\s*;[^\u003e\u0026]+Account.User1.Password\u003e\\$\\([^\\)]+\\swget\\s"
  			},
  			{
- 				"id": "120",
+ 				"id": "119",
  				"mz": "$u_get_value",
  				"rx": "\u003c\\?[^\u003e]+\\$[^\u003e]{1,30}=\\s*explode\\([\\x20-\\x80\\s\\r\\n]{0,150};\\s*array_intersect_ukey\\(array\\(\\$\\_REQUEST\\[\\$.{1,100}(\\$[^\u003e]{1,150}\\[\\d+\\]\\.?){2}"
  			},
  			{
- 				"id": "121",
+ 				"id": "120",
  				"mz": "$u_args_value,$u_request_headers,$u_uri",
  				"rx": "(\\ballowscriptaccess\\b.{1,500}\u003c\\s*param\\b\\s[^\u003c\u003e]+\\s\\bvalue\\s*=\\s*['\"]?https?:\\/{2}[^\u003c\u003e\\s]{1,200}.swf|\u003c\\s*param\\b\\s[^\u003c\u003e]+\\s\\bvalue\\s*=\\s*['\"]?https?:\\/{2}[^\u003c\u003e\\s]{1,200}.swf\\b.{1,500}\\ballowscriptaccess)\\b"
  			},
  			{
- 				"id": "122",
+ 				"id": "121",
  				"mz": "$u_request_uri,$u_get_value",
  				"rx": "\\/(WEB-INF\\/|\\.ssh\\/(authorized_keys|known_hosts)\\b)"
  			},
  			{
- 				"id": "123",
+ 				"id": "122",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_get_value,$u_d_get_value,$u_cookie_value",
  				"rx": "\\bselect\\b.{1,200}\\bregexp\\b",
  				"en_flag": "1"
  			},
  			{
- 				"id": "124",
+ 				"id": "123",
  				"mz": "$u_get_value,$u_cookie_value",
  				"rx": "\\bhttps?://[\\w\\./]{5,30}\\.exe($|\\s*;)"
  			},
  			{
- 				"id": "125",
+ 				"id": "124",
  				"mz": "$u_args_value",
  				"rx": "^((.{0,100}[\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,10})[@;\\{])?\\s*(assert|exec|shell_exec|usort|eval)\\s*\\(+\\s*(\\$_(post|get)\\s*[\\[,]|[\\x20-\\x80\\s]{2,15}\\$\\{IFS\\})"
  			},
  			{
- 				"id": "126",
+ 				"id": "125",
  				"mz": "$u_request_uri,$u_uri",
  				"rx": "/phpmyadmin[^/]{0,40}/scripts/setup\\.php\\b"
  			},
  			{
- 				"id": "127",
+ 				"id": "126",
  				"mz": "$u_request_body",
  				"rx": "\\b(_method=__construct\\b[^\\r\\n]{0,200}\u0026filter\\[\\]=(system|exec)|filter\\[\\]=(system|exec)\\b[^\\r\\n]{0,200}\u0026_method=__construct)\\b"
  			},
  			{
- 				"id": "128",
+ 				"id": "127",
  				"mz": "$u_request_body",
  				"rx": "\\w+=(exec|system)\u0026\\w+=[\\x20-\\x80\\s\\r\\n]{0,150}\u0026_method=filter"
  			},
  			{
- 				"id": "129",
+ 				"id": "128",
  				"mz": "$u_request_uri",
  				"rx": "/phpThumb/phpThumb\\.php\\?src=[^\\r\\n]{4,300}\u0026fltr\\[\\]=blur\\|\\d+[^\\r\\n\u0026]{0,150};[^\\r\\n]{5}"
  			},
  			{
- 				"id": "130",
+ 				"id": "129",
  				"mz": "$u_uri,$u_get_value",
  				"rx": "\u003c\\?php\\s[^\\r\\n]{10,100}\\?\u003e"
  			},
  			{
- 				"id": "131",
+ 				"id": "130",
  				"mz": "$u_get_value,$u_uri",
  				"rx": "\\bprint\\(md5\\([\\x20-\\x80\\s]{1,30}\\)\\)"
  			},
  			{
- 				"id": "132",
+ 				"id": "131",
  				"mz": "$u_request_headers,$u_request_uri,$u_args_value",
  				"rx": "(/etc/(./)?passwd(('\")?|$)|\\bcmd\\.exe\\b)"
  			},
  			{
- 				"id": "133",
+ 				"id": "132",
  				"mz": "$u_get_value",
  				"rx": "/['\"]*e['\"]*t['\"]*c((\\$\\w+)|['\"])*/['\"]*p['\"]*a['\"]*s['\"]*s['\"]*w['\"]*d((\\$\\w+)|['\"])*\\s*#*$"
  			},
  			{
- 				"id": "134",
+ 				"id": "133",
  				"mz": "$u_post_value",
  				"rx": "^(.{0,100}[\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,10})/['\"]*e['\"]*t['\"]*c((\\$\\w+)|['\"])*/['\"]*p['\"]*a['\"]*s['\"]*s['\"]*w['\"]*d((\\$\\w+)|['\"])*\\s*#*$"
  			},
  			{
- 				"id": "135",
+ 				"id": "134",
  				"mz": "$u_request_body,$u_post_value",
  				"rx": "^(.{0,50}[\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,10})\u003c!--#(exec\\s+cmd|include\\s+([\\x20-\\x80\\s]{0,50}\\s+)?\\bfile|jdbc\\s+([\\x20-\\x80]{0,50}\\s+)?\\bname)\\s*=\\s*[\\\"\\']"
  			},
  			{
- 				"id": "136",
+ 				"id": "135",
  				"mz": "$u_args_value",
  				"rx": "^.{0,50}\u003c[a-zA-Z]{3,10}[\\x20-\\x80\\s]{1,30}\\bwindow\\.open\\([\\x20-\\x80\\s]{0,50}\u003cscript\u003erequire\\(\\x5c\\x27child_process\\x5c\\x27\\)\\.(exec|execFile|execSync|execFileSync|spawn)\\("
  			},
  			{
- 				"id": "137",
+ 				"id": "136",
  				"mz": "$u_request_body,$u_post_value",
  				"rx": "^[\\x20-\\x80\\s]{0,50}\\-oProxyCommand=[\\x20-\\x80\\s]{10,150}\\|(\\s|\\$IFS|\\$\\(|\\))*base64(\\s|\\$IFS|\\$\\(|\\))*-d"
  			},
  			{
- 				"id": "138",
+ 				"id": "137",
  				"mz": "$u_request_body",
  				"rx": "^(%!PS|\\$\\s+[\\x20-\\x80\\s]{0,3}gs\\s+\\-).{10,230}restore.{10,150}mark\\s+/OutputFile\\s*\\(%pipe%[\\x20-\\x80\\s]{0,30}\\scurrentdevice\\s+putdeviceprops"
  			},
  			{
- 				"id": "139",
+ 				"id": "138",
  				"mz": "$u_request_uri",
  				"rx": "/phpThumb\\.php\\?src=[\\x20-\\x80\\s]{3,30}\u0026fltr\\[\\]=blur\\|[^\u0026\\r\\n]{1,100};\\s*[\\x20-\\x80]{2}"
  			},
  			{
- 				"id": "140",
+ 				"id": "139",
  				"mz": "$u_get_value",
  				"rx": ";\\s*copy\\s+\\(select\\s+\\x27[\\x20-\\x80\\s]{0,100}\\x27\\)\\s+to\\s[\\x20-\\x80\\s]{0,20}\\x27[\\x20-\\x80\\s]{10}"
  			},
  			{
- 				"id": "141",
+ 				"id": "140",
  				"mz": "$request_body",
  				"rx": "^\\{.{1,15}\\x22link\\x22:\\s*\\[.{1,60}\\x22options\\x22:.{0,200}\\x22O:\\d{1,3}:\\x5c\\x22.{100,800}\\x22_links\\x22:\\s*\\{.{0,100}\\x22type\\x22:.{0,200}\\{.{0,100}\\x22href\\x22:\\s*\\x22[^\\x22]{5,40}/rest/type/"
  			},
  			{
- 				"id": "142",
+ 				"id": "141",
  				"mz": "$u_request_headers",
  				"rx": "\\${substr\\{0\\}\\{1\\}{\\$spool_directory}}[a-zA-Z0-9_]{2,10}\\${substr\\{10\\}\\{1\\}{\\$tod_log}}"
  			},
  			{
- 				"id": "143",
+ 				"id": "142",
  				"mz": "$u_request_uri",
  				"rx": "\\bsetup\\.cgi\\?next_file=\\w{1,20}.cfg\u0026todo=syscmd\u0026cmd=[^\u0026]{0,30}\\b(rm|wget|http|chmod|sh)\\b[^\u0026]{20}"
  			},
  			{
- 				"id": "144",
+ 				"id": "143",
  				"mz": "$u_get_value",
  				"rx": "\\bfopen\\(.{10,100}fread\\([^;\\)]{1,30},\\s*\"?(\\d+|filesize)\\b.{1,100}\\bfclose\\(\\$"
  			},
  			{
- 				"id": "145",
+ 				"id": "144",
  				"mz": "$u_get_value",
  				"rx": "\\bfile_put_contents\\(\\s*\"\\s*[^\"\\r\\n\\s]{1,20}\\.(php|jsp|asp)\\s*\"\\s*,\\s*base64_decode\\(\\s*\""
  			},
  			{
- 				"id": "146",
+ 				"id": "145",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "[\\s/]as[\\s/\\(][\\x20-\\x80\\s]{3,80}[\\s/]as[\\s/\\(][\\x20-\\x80\\s]{6,20}[\\s\\)/]where\\b",
  				"en_flag": "1"
  			},
  			{
- 				"id": "147",
+ 				"id": "146",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "\\d*/\\*.{0,10}\\*/and/\\*.{0,10}\\*/\\w{5,20}\\(\\)"
  			},
  			{
- 				"id": "148",
+ 				"id": "147",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "\\bpowershell\\b[^\\r\\n]{1,15}\\(new\\-object\\s+System\\.Net\\.WebClient\\)\\.DownloadFile\\(+['\"]http://[^\\]]{0,50}\\.exe"
  			},
  			{
- 				"id": "149",
+ 				"id": "148",
  				"mz": "$u_request_body",
  				"rx": "^{\"set-property\":{\"jmx.serviceUrl\":\"service:jmx:rmi:"
  			},
  			{
- 				"id": "150",
+ 				"id": "149",
  				"mz": "$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "([^:]{10}|^[^:]{0,10})(;|\\(|\\s|=|\\*/)union(\\s|\\x0a|\\x0b|\\x0c|\\x0d|\\xa0|\\s*/\\*.{0,50}\\*/\\s*)+(all(\\s|\\x0a|\\x0b|\\x0c|\\x0d|\\xa0|\\s*/\\*.{0,50}\\*/\\s*)+)?select(\\s|\\(|\\s*/\\*.{0,50}\\*/\\s*)+[\\x20-\\x80\\s]",
  				"en_flag": "1"
  			},
  			{
- 				"id": "151",
+ 				"id": "150",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_args_value,$u_http_referer,$u_http_user_agent",
  				"rx": "(;|\\(|\\)|,|\\*/|^)\\s*select\\s+(\\*|[\\x20-\\x80\\s]{0,100}\\(*CASE\\s([^\\r\\n]{0,20}\\s)?WHEN\\s[^\\r\\n]{0,200}\\sEND\\b\\)*[\\x20-\\x80\\s]{0,100})\\sfrom[\\s\\(]([\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,9}$)",
  				"en_flag": "1"
  			},
  			{
- 				"id": "152",
+ 				"id": "151",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_args_value,$u_http_referer,$u_http_user_agent",
  				"rx": "(;|\\(|\\s)\\bDBMS_PIPE\\.RECEIVE_MESSAGE\\(CHA?R\\(\\d{2,3}\\)((\\|{2}|\\+)CHA?R\\(\\d{2,3}\\))+\\)*\\s*,\\d+\\s*\\)([\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,9}$)"
  			},
  			{
- 				"id": "153",
+ 				"id": "152",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_args_value,$u_http_referer,$u_http_user_agent",
  				"rx": "^([\\x20-\\x80\\s]{0,150}(;|=|\\(|\\*/)\\s*)?\\bdelete\\b(\\s+(\\*?\\s+)?|(\\s+\\*\\s*|\\s*)/\\*[\\x20-\\x80\\s]{0,100}\\*/(\\s*|\\s*\\*\\s+))\\bfrom(\\s+[a-zA-Z0-9\\-\\_\\.]{2}|\\s*/\\*)"
  			},
  			{
- 				"id": "154",
+ 				"id": "153",
  				"mz": "$u_request_uri,$u_post_value,$u_d_post_value,$u_request_body,$u_uri",
  				"rx": "(;|\\(|\\s|=|^)select[\\s\\+]+name_const\\(\\s*[a-zA-Z0-9\\-\\_\\.\\(\\)\\@]{1,20},\\d+\\s*\\)"
  			},
  			{
- 				"id": "155",
+ 				"id": "154",
  				"mz": "$u_request_uri",
  				"rx": "class\\.classLoader\\.URLs\\[0\\]=jar:http://[^\\r\\n]{5,50}\\.jar"
  			},
  			{
- 				"id": "156",
+ 				"id": "155",
  				"mz": "$u_request_uri,$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "((char\\(\\d{2,3}\\)[\\s\\+\\,]{1,4}){8}|DBMS_PIPE\\.RECEIVE_MESSAGE\\((CHR\\(\\d{2,3}\\)\\|{2}){3}|(\\bselect\\s+|\\b(and|or)\\s[\\x20-\\x80\\s]{1,15}(=[\\x20-\\x80\\s]{0,30})?[=,\\s])@{1,3}version\\b|;\\s*PREPARE\\s+[\\x20-\\x80]{1,30}\\s+FROM\\s+@[\\x20-\\x80]{1,30}\\s*;\\s*EXECUTE\\s)"
  			},
  			{
- 				"id": "157",
+ 				"id": "156",
  				"mz": "$u_request_uri",
  				"rx": "^[^\u0026]{0,150}/perl(\\.exe)?\\?[^/\u0026]{1,20}\\x22\\s*system[^/\u0026]{1,10}\\([\\x22\\x27]"
  			},
  			{
- 				"id": "158",
+ 				"id": "157",
  				"mz": "$u_args_value",
  				"rx": "(^|[^\\|])\\|\\s*shell\\s*\\({1,3}\"[^\"\\r\\n]{5,30}\"\\s*\\){1,3}\\s*\\|($|[^\\|])"
  			},
  			{
- 				"id": "159",
+ 				"id": "158",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "^[\\x20-\\xff\\s]{0,50}[\\s'\"](\\b(and|x?or(\\s+not)?)\\b|(\u0026\u0026|\\|{2}))\\s+\\({0,3}(\\s|'|\"|\\\\x22|\\\\x27){1,3}[\\x20-\\x80\\s]{1,20}(\\s|'|\"|\\\\x22|\\\\x27)\\s*((\u003c|=|\u003e|!=|\u003c\u003e|\u003e=|\u003c=)\\s*|(is|(r|REGEXP_)?like|not\\s+r?like|SOUNDS\\s+LIKE|(not\\s+)?REGEXP)\\s+)(\\s|'|\"|\\\\x22|\\\\x27)?[\\x20-\\x80\\s]{0,40}((\\s|'|\"|\\\\x22|\\\\x27)(\\s|\\-\\-|\\x23|/\\*.{0,20}\\*/){0,10}\\s*\\w{0,20})?$"
  			},
  			{
- 				"id": "160",
+ 				"id": "159",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_args_value,$u_http_referer,$u_http_user_agent",
  				"rx": "(;|\\(|\\s|=|^|\\*/)\\bselect\\b[\\x20-\\x80\\s]{0,150}/\\*[\\x20-\\x80\\s]{0,40}\\*/[\\x20-\\x80\\s]{0,150}\\bfrom\\b([\\s\\(]([\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,9}$)|/\\*)",
  				"en_flag": "1"
  			},
  			{
- 				"id": "161",
+ 				"id": "160",
  				"mz": "$u_request_uri,$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,50}\\\u0026{2}\\s+this\\.password(zz)?\\.match\\(/.{0,20}/\\)//\\s*(\\%00|\\x00)"
  			},
  			{
- 				"id": "162",
+ 				"id": "161",
  				"mz": "$u_get_value,$u_uri,$u_request_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,40}\u003c\\s*(iframe|img)\\b\\s*[\\x20-\\x80]{2,30}=((\u0026#x|\\x5c{1,}u00)[0-9a-fA-F]{2}){5}"
  			},
  			{
- 				"id": "163",
+ 				"id": "162",
  				"mz": "$u_get_value",
  				"rx": "([^\\?/]{20}|^[^\\?/]{0,19})/(b|\\?)(i|\\?)(n|\\?)/(c|\\?)(a|\\?)(t|\\?)\\s{1,10}/(e|\\?)(t|\\?)(c|\\?)/(p|\\?)(a|\\?)(s|\\?){2}(w|\\?)(d|\\?)((\\s|\\)|\")[^\\?/]{20}|((\\s|\\)|\")[^\\?/]{0,19})?$)"
  			},
  			{
- 				"id": "164",
+ 				"id": "163",
  				"mz": "$u_args_value",
  				"rx": "(\\.{2,4}(/|\\x5c|%5c|0x5c|\\x5c{3}|\\\\x5c|%2f|\\x2f|\\\\x2f){1,3}){3}"
  			},
  			{
- 				"id": "165",
+ 				"id": "164",
  				"mz": "$u_get_value",
  				"rx": "^(.{0,100}[\\x20-\\x80\\s]{10}|[\\x20-\\x80\\s]{0,10})((\\.\\./)|(\\.\\.\\\\\\\\)|(\\.\\.\\x5c)|(\\.\\.\\x2f))+(?:boot|rc|etc|usr|var|root|web-inf|([^\u0026]{1,10}\\.(php|php2|php3|php4|php5|phtml|asp|aspx|ascx|jsp|cfm|pl|cgi|cer|asa|htr|cdx|ashx|jspx|htaccess|asmx|jspf)))\\b"
  			},
  			{
- 				"id": "166",
+ 				"id": "165",
  				"mz": "$u_get_value",
  				"rx": "((%c0%ae|\\\\xc0\\\\xae|\\.|%u002e){2}(%c0%af|\\\\xC0\\\\xAF|\\/|%c1%9c|\\\\xc1\\\\x9c|\\\\|%u2215|%u2216|%255c|%252f)){2}"
  			},
  			{
- 				"id": "167",
+ 				"id": "166",
  				"mz": "$http_cookie",
  				"rx": "(\\s)*\\brememberMe\\b=[a-zA-Z0-9/+]{406}={2}$"
  			},
  			{
- 				"id": "168",
+ 				"id": "167",
  				"mz": "$u_request_uri",
  				"rx": "^/(_async/AsyncResponseService|wls-wsat/CoordinatorPortType)$"
  			},
  			{
- 				"id": "169",
+ 				"id": "168",
  				"mz": "$u_request_uri",
  				"rx": "/wp-admin/admin-post\\.php\\?.{0,50}(swp_debug=load_options.{0,50}swp_url=https?://(((\\d){1,3}\\.){3}\\d{1,3}(\\:\\d{2,5})|[^\\/]{11,}\\.[^\\/]{2,})/([a-z0-9\\.\\-\\_\\/]{0,20})[a-z0-9\\.\\-\\_]{1,12}\\.(txt|php)|swp_url=https?://(((\\d){1,3}\\.){3}\\d{1,3}(\\:\\d{2,5})|[^\\/]{11,}\\.[^\\/]{2,})/([a-z0-9\\.\\-\\_\\/]{0,20})[a-z0-9\\.\\-\\_]{1,12}\\.(txt|php).{0,50}swp_debug=load_options)"
  			},
  			{
- 				"id": "170",
+ 				"id": "169",
  				"mz": "$u_get_value,$u_request_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,40}[^\\|][;\\|'\"`]\\s*([\\x20-\\x80]{3,20}\\([^\\(\\)]{2,20}[^\\$]|\\bwget|\\bcurl|\\bcat)\\$(\\{IFS\\}|IFS\\$9)[^\\}]"
  			},
  			{
- 				"id": "171",
+ 				"id": "170",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": ",\\s*\\$or\\s*:\\s*\\[\\s*\\{\\}\\s*,\\s*\\{\\s*'[\\x20-\\x80]{1,30}'\\s*:\\s*'"
  			},
  			{
- 				"id": "172",
+ 				"id": "171",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,20}\\[\\$ne\\]=[\\x20-\\x80]{1,15}$"
  			},
  			{
- 				"id": "173",
+ 				"id": "172",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri,$u_request_uri",
  				"rx": ";[\\x20-\\x80]{1,32}=\\s*new\\s+Date\\(\\)\\s*;\\s*do\\{[\\x20-\\x80]{1,32}=\\s*new\\s+Date\\(\\)\\s*;\\s*\\}\\s*while\\([\\x20-\\x80]{1,16}\\-[\\x20-\\x80]{1,16}\u003c\\d+\\s*\\)",
  				"en_flag": "1"
  			},
  			{
- 				"id": "174",
+ 				"id": "173",
  				"mz": "$u_request_uri",
  				"rx": "cancel?q(%23|#)(access_callback|pre_render|post_render|lazy_builder)[]=\\w{2,}\u0026q[%23type]=markup\u0026q[%23markup]="
  			},
  			{
- 				"id": "175",
+ 				"id": "174",
  				"mz": "$u_request_uri",
  				"rx": "q=file/ajax/actions/cancel/(%23|#)options/path/form-[a-zA-Z]{40}"
  			},
  			{
- 				"id": "176",
+ 				"id": "175",
  				"mz": "$u_request_body",
  				"rx": "^.{0,800}\\x22(@type|\\\\u0040\\\\u0074\\\\u0079\\\\u0070\\\\u0065)\\x5c?\\x22\\s{0,20}:\\s{0,20}\\x5c?\\x22[\\x20-\\x80\\s]{0,40}(xsltc\\.trax\\.TemplatesImpl|rowset\\.JdbcRowSetImpl|apache\\.xbean\\.propertyeditor\\.JndiConverter|\\.sqlmap\\.engine\\.transaction\\.jta\\.JtaTransactionConfig|\\.anteros\\.dbcp\\.AnterosDBCPConfig|\\.config\\.types\\.ResourceRef|shiro\\.realm\\.jndi\\.JndiRealmFactory|shiro\\.jndi\\.JndiObjectFactory|ignite\\.cache\\.jta\\.jndi\\.CacheJndiTmLookup|ignite\\.cache\\.jta\\.jndi\\.CacheJndiTmFactory|utils\\.JNDIConnectionProvider|transaction\\.jms\\.internal\\.XaPooledConnectionFactory|transaction\\.jms\\.RecoverablePooledConnectionFactory|javax.swing.JEditorPane|apache\\.xalan\\.lib\\.sql\\.JNDIConnectionPool|jms\\.AQjmsQueueConnectionFactory|jms\\.AQjmsXATopicConnectionFactory)\\b"
  			},
  			{
- 				"id": "177",
+ 				"id": "176",
  				"mz": "$u_post_value",
  				"rx": "\\bset\\s*\\(\\s*\\$[^\u0026\\r\\n]{3,300}\\.getClass\\(\\s*\\)\\.forName\\(\\s*.java\\.lang\\.Runtime.\\s*\\)\\.getMethod\\(\\s*.getRuntime.\\s*[^\u0026\\r\\n]{20,100}\\.waitFor\\("
  			},
  			{
- 				"id": "178",
+ 				"id": "177",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "\\b(ch\\.qos\\.logback\\.core\\.db\\.DriverManagerConnectionSource|com\\.sun\\.org\\.apache\\.xalan\\.internal\\.xsltc\\.trax\\.TemplatesImpl)\\b[^\\r\\n]{1,50}(\\burl\\b[^:\\r\\n]{0,3}:\\s*[^:\\r\\n]{0,3}\\bjdbc:h2:|['\"]\\s{0,20}transletBytecodes\\s{0,20}['\"])"
  			},
  			{
- 				"id": "179",
+ 				"id": "178",
  				"mz": "$u_http_cookie",
  				"rx": "dOSP_2132_language\\s*=[^\\r\\n;=]{0,20}'[^\\r\\n;=]{20,}'"
  			},
  			{
- 				"id": "180",
+ 				"id": "179",
  				"mz": "$u_post_value",
  				"rx": "^[\\x20-\\x80\\s]{0,40}\u003c\\s*(iframe|img)\\b\\s*[\\x20-\\x80]{2,30}=((\u0026#x|\\x5c{1,}u00)[0-9a-fA-F]{2}){5}"
  			},
  			{
- 				"id": "181",
+ 				"id": "180",
  				"mz": "$u_post_value,$u_d_post_value",
  				"rx": "^[\\x20-\\x80]{0,40}[\\s'\"](and|x?or|-)\\b([\\x20-\\x80]{0,10}\\(*\\s*\\b(extractvalue|updatexml|XMLType)|\\s[\\x20-\\x80]{0,80}\\bselect\\b[\\x20-\\x80]{0,100},\\s*floor\\s*\\(\\s*rand)\\s*\\([\\x20-\\x80\\s]{0,20},",
  				"en_flag": "1"
  			},
  			{
- 				"id": "182",
+ 				"id": "181",
  				"mz": "$u_get_value,$u_d_get_value",
  				"rx": "^[\\x20-\\x80\\s]{0,15}([\\s'\"\\)]|/\\*.{0,20}\\*/\\s*)(\\b(and|or(\\s+not)?)\\b|(\u0026\u0026|\\|{2}))(\\s+\\(?|\\(|\\s*/\\*.{0,20}\\*/\\s*)[0-9]+\\s*[\\(0-9\\)\\+\\-\\*\\/]*\\s*(\\s*/\\*.{0,20}\\*/)?(\\s+(is\\s+(not\\s+)?(TRUE|NULL))|\\s+MOD\\s+\\d+|\\s+(not\\s+)?BETWEEN\\s+\\d+\\s+and\\s+\\d+|\\s*=LENGTH\\(['\"]\\w+['\"]\\)|\\s*=\\s*format\\([\\d\\.]+,\\d+\\)|\\s*=\\s*(FIELD|FIND_IN_SET|INSTR)\\(\\s*['\"][^\u0026]{5,50}['\"]\\s*\\)|\\s*=\\s*HEX\\(CHAR\\(\\d{2,3}\\){2})(\\s|\\-\\-|\\x23|/\\*.{0,20}\\*/){0,10}\\s*[\\w\\+]{0,15}$"
  			},
  			{
- 				"id": "183",
+ 				"id": "182",
  				"mz": "$u_get_value,$u_d_get_value",
  				"rx": "^[\\x20-\\x80\\s]{0,10}[\\s'\"](\u0026\u0026|\\|{2})\\s+['\"]{1,3}[\\x20-\\x80\\s]{1,20}['\"]\\s*((\u003c|=|\u003e|!=|\u003c\u003e|\u003e=|\u003c=)\\s*|(is|(r|REGEXP_)?like|not\\s+r?like|SOUNDS\\s+LIKE|(not\\s+)?REGEXP)\\s+)['\"]?[\\x20-\\x80\\s]{0,40}(['\"](\\s|\\-\\-|\\x23|/\\*.{0,20}\\*/){0,10}\\s*)?$"
  			},
  			{
- 				"id": "184",
+ 				"id": "183",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri,$u_request_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,10}[\\s'\"];\\b\\s*(create|replace)\\s+(or\\s+(create|replace)\\s+)?function\\s+sys_eval[\\x20-\\x80\\s]{0,20}\\sreturns\\s",
  				"en_flag": "1"
  			},
  			{
- 				"id": "185",
+ 				"id": "184",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri,$u_request_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,10}[\\s'\"]\\s*;\\s*exec\\b.{0,2}\\s+master\\.(dbo)?\\.xp[_\\[]cmdshell\\s[\\x20-\\x80\\s]{10}"
  			},
  			{
- 				"id": "186",
+ 				"id": "185",
  				"mz": "$u_get_value,$u_d_get_value",
  				"rx": "^\\s*\\{\\s*\\$(lte?|gte?|ne):\\s*(\\w{1,10}|['\"]?\\w{0,10}['\"]?)\\s*\\}\\s*$"
  			},
  			{
- 				"id": "187",
+ 				"id": "186",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "java\\.lang\\.Runtime@getRuntime\\(\\)\\.exec|Runtime\\.getRuntime\\(\\)\\.exec\\("
  			},
  			{
- 				"id": "188",
+ 				"id": "187",
  				"mz": "$file_content,$u_post_value,$u_get_value",
  				"rx": "^(.{1,200}\\b(equals\\(\\s*\\brequest\\.getParameter\\(\\s*['\"])?.{0,200}java\\.io\\.InputStream.{1,20}=\\s*|.{1,20})\\bRuntime\\.getRuntime\\(\\s*\\)\\.exec\\(request\\.getParameter\\("
  			},
  			{
- 				"id": "189",
+ 				"id": "188",
  				"mz": "$file_content,$u_post_value,$u_get_value",
  				"rx": "\\bjava\\.io\\.FileOutputStream\\(application\\.getRealPath\\(['\"][\\w\\\\/\\+'\"\\)\\s]{1,20}\\brequest\\.getParameter\\(['\"][\\x20-\\x80\\s]{3,25}\\)\\.write\\("
  			},
  			{
- 				"id": "190",
+ 				"id": "189",
  				"mz": "$u_get_value,$u_d_get_value",
  				"rx": "^\\s*\\d{1,15}\\s+(AND(\\s+NOT)?\\s+|AND\\s+!|(MOD|DIV|XOR|\\|{2}|\u0026\u0026)\\s+)\\d+$"
  			},
  			{
- 				"id": "191",
+ 				"id": "190",
  				"mz": "$u_request_body",
  				"rx": "\u0026core=[^\\r\\n]{1,40}\u0026dataConfig=.{0,30}\u003cdataConfig\u003e.{0,30}\u003cdataSource\\s.{0,30}type=['\"]JdbcDataSource['\"]\\s.{0,30}jndiName=['\"]ldap://https?:[\\w\\:\\.]{15,50}/\\w.{0,300}\u003centity\\b"
  			},
  			{
- 				"id": "192",
+ 				"id": "191",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_args_value",
  				"rx": "^[\\x20-\\x80\\s]{0,40}\u003c\\s*(iframe|img)\\b[\\s/]+([\\x20-\\x80\\s]{0,20}[\\s/])?(src|DYNSRC|LOWSRC|STYLE)\\s*=\\s*['\"]?\\s*(vbscript|javascript|https?://|/)"
  			},
  			{
- 				"id": "193",
+ 				"id": "192",
  				"mz": "$u_request_body",
  				"rx": "^[\\x20-\\x80\\s]{1,60}\u0026expired=\\d{0,2}\u0026old=[\\w\\d]{1,20}\\|[^\\|]\\s*[\\{\\}a-z]{3}"
  			},
  			{
- 				"id": "194",
+ 				"id": "193",
  				"mz": "$u_request_uri",
  				"rx": "/descriptorByName/org\\.jenkinsci\\.plugins\\.scriptsecurity\\.sandbox\\.groovy\\.SecureGroovyScript/checkScript\\?sandbox=\\s*\\bTrue\\b.{0,240}\\bexecute\\(\\s*\\)\\}\\s*\\}$"
  			},
  			{
- 				"id": "195",
+ 				"id": "194",
  				"mz": "$u_request_body",
  				"rx": "confluence[\\x20-\\x80\\s]{50,80}packages/\\.\\./web.xml"
  			},
  			{
- 				"id": "196",
+ 				"id": "195",
  				"mz": "$u_uri",
  				"rx": "/(nessus_is_probing_you_|appscan_fingerprint|nessustest)\\b"
  			},
  			{
- 				"id": "197",
+ 				"id": "196",
  				"mz": "$u_get_value,$u_d_get_value,$u_cookie_value,$u_uri,$u_request_uri",
  				"rx": "\\bselect\\s+(\\s*[\\x20-\\x80\\s]{1,25}\\sas\\s.{1,30},?){1,5}\\sfrom\\s[\\x20-\\x80]{1,25}\\swhere\\b"
  			},
  			{
- 				"id": "198",
+ 				"id": "197",
  				"mz": "$u_request_body",
  				"rx": "(^bsh|^[\\x20-\\x80\\s]{1,100}\u0026bsh)\\.((script|client)|servlet\\.(output|captureOutErr))=\\s*['\"]*\\s*(import\\s+[a-z]{2,10}\\d{0,2}\\.[a-z]{2,10}\\.|[\\x20-\\x80\\s]{0,100}\\b[a-z]{2,10}\\.[a-z]{2,10}\\(|\\s*exec\\(\\s*['\"])"
  			},
  			{
- 				"id": "199",
+ 				"id": "198",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "^[\\x20-\\x80]{0,10}(\\bINSERT\\s+INTO\\s[\\x20-\\x80]{1,20}\\sVALUES\\b|\\bselect\\s+pg_sleep\\s{0,100}\\(|(;|\\(|\\)|,|\\*/)\\s*select\\s+(\\*|[\\x20-\\x80]{1,10})\\s+from\\b)"
  			},
  			{
- 				"id": "200",
+ 				"id": "199",
  				"mz": "$u_post_key,$u_post_value,$u_get_key,$u_get_value",
  				"rx": "^processbuilder(\\.evil\\.(whileclosure|instantiatetransformer|clonetransformer|invokertransformer|instantiatefactory|forclosure|prototypeclonefactory|prototypeserializationfactory))$"
  			},
  			{
- 				"id": "201",
+ 				"id": "200",
  				"mz": "$u_request_uri,$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,50}[\\s;\\(]declare\\s+@[\\w\\.-_]{1,25}\\s+(int\\b|n?varchar(\\(\\d+\\))?)($|\\s|,|;)"
  			},
  			{
- 				"id": "202",
+ 				"id": "201",
  				"mz": "$u_request_body",
  				"rx": "^\\{[\\x20-\\x80\\s\\r\\n]{0,200}\"sheet\":\\[\"\\.es\\([\\x20-\\x80\\s\\r\\n]{1,100}\\bchild_process['\"]?\\)?.exec\\([\\x20-\\x80\\s\\r\\n]{1,100}\\)\\s*;[\\x20-\\x80\\s]{0,100}\\bprocess\\.exit\\(.{1,250},\\s*\"interval\":"
  			},
  			{
- 				"id": "203",
+ 				"id": "202",
  				"mz": "$u_get_value,$u_d_get_value,$u_request_uri,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,30}(\\d\\s*=\\s*convert\\((int|varchar),[\\w\\s\\_\\.\\-,\\{\\}\\[\\]@\\(\\)]{4,80}\\)|convert\\((int|varchar),[\\w\\s\\_\\.\\-,\\{\\}\\[\\]@\\(\\)]{4,80}\\){1,4}[\\s'\"]{0,5}=\\s*\\d)"
  			},
  			{
- 				"id": "204",
+ 				"id": "203",
  				"mz": "$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "^[\\x20-\\x80]{0,40}(\\s|'|\"|\\*/)(and|x?or)(\\s|'|\"|/\\*.{0,100}\\*/)[\\x21-\\x80]{5,40}\\(((null)?\\s{0,5}\\)+((\\s+(not\\s+)?(is|like)\\s[\\x20-\\x80]{0,40}--)|--)|[\\x20-\\x80]{1,20},null\\)+\\s*--)"
  			},
  			{
- 				"id": "205",
+ 				"id": "204",
  				"mz": "$u_args_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,30}\u003c\\s*[a-z]{1,9}\\d?[\\s/]([\\x20-\\x80\\s]{1,60}[\\s/])?\\bon[a-z]{4,9}(e?change|(meta)?dat[ae]|menu|through|print|load|wheel)?(\\[(\\\\x0b|\\\\t|\\\\f|\\\\r|\\\\n)\\])?\\s*(=|\u0026equals;*)\\s*['\"]?(alert|prompt)(\\(?['\"`]|\\(['\"`]?.{0,30}\\)|\\(document\\.)"
  			},
  			{
- 				"id": "206",
+ 				"id": "205",
  				"mz": "$request_uri",
  				"rx": "\\/[\\x20-\\x80]{1,50}\\.\\bphp\\b[\\x20-\\x80]{1,50}%0A[\\x20-\\x80]{1,50}\\?[\\x20-\\x80]{1499}"
  			},
  			{
- 				"id": "207",
+ 				"id": "206",
  				"mz": "$u_args_value,$u_uri,$u_request_uri",
  				"rx": "^[\\x20-\\x80\\s]{1,60}\\sinto\\s+outfile\\s+('|\"|\\\\x22)[^\\r\\n'\"]{3,50}\\.[^\\r\\n'\"]{1,30}('|\"|\\\\x22)"
  			},
  			{
- 				"id": "208",
+ 				"id": "207",
  				"mz": "$u_args_value,$u_uri,$u_request_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,60}(select|and)(\\s[\\x20-\\x80\\s]{1,40})?[\\s\\(,]+load_file\\(\\s*('|\"|\\\\x22|0x[1-8])[^\\r\\n\\s\\)]{3,100}\\)"
  			},
  			{
- 				"id": "209",
+ 				"id": "208",
  				"mz": "$u_get_value,$u_uri",
  				"rx": "\u003c\\s{0,10}meta[\\s/][\\x20-\\x80\\s]{0,100}\\b(((java|vb)script|url\\s*(=|\u0026equals;*)\\s*['\"`]?((https?:)?//|data:))\\b[\\x20-\\x80\\s]{0,100}\\bhttp-equiv\\s*(=|\u0026equals;*)\\s*['\"`]+refresh['\"`]|http-equiv\\s*(=|\u0026equals;*)\\s*['\"`]+refresh['\"`][\\x20-\\x80\\s]{0,100}\\b((java|vb)script|url\\s*(=|\u0026equals;*)\\s*['\"`]?((https?:)?//|data:)))"
  			},
  			{
- 				"id": "210",
+ 				"id": "209",
  				"mz": "$u_args_value,$u_request_uri,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,100}(;|\\(|\\)|,|\\*/)\\s*(select(\\s+|\\()(distinct\\s+)?|\\s{1,30}(and|x?or|\\\u0026{2}|\\|{2})\\s{1,40})\\(*\\bELT\\([\\d=]+,[^\\r\\n]{0,60}(\\d|'|\")\\s*\\)"
  			},
  			{
- 				"id": "211",
+ 				"id": "210",
  				"mz": "$u_args_value,$u_request_uri",
  				"rx": "^.{0,150}\\.__class__\\.__(mro|bases)__(\\[[\\x20-\\x80]{0,50}\\]|\\.__getitem__\\(\\d+\\))\\.__subclasses__"
  			},
  			{
- 				"id": "212",
+ 				"id": "211",
  				"mz": "$u_post_value,$u_d_post_value",
  				"rx": "^[\\x20-\\x80\\s]{0,20}\\\u0026{2}\\s+this\\.password(zz)?\\.match\\(/.{0,20}/\\)//\\s*(\\%00|\\x00)"
  			},
  			{
- 				"id": "213",
+ 				"id": "212",
  				"mz": "$u_args_value,$u_request_uri,$u_uri",
  				"rx": "^.{0,100}[\\s\\(/]SELECT\\s*mid\\(+[\\x20-\\x80\\s]{1,80},\\d+\\s*(,|\\s*\\))[\\x20-\\x80\\s]{0,30}[\\s/]+from\\b"
  			},
  			{
- 				"id": "214",
+ 				"id": "213",
  				"mz": "$u_args_value,$u_request_uri,$u_uri",
  				"rx": "^.{0,100}[\\s\\(/]SELECT\\s*IFNULL\\(+[\\x20-\\x80\\s]{1,80},[\\x20-\\x80\\s]{0,30}\\)[\\x20-\\x80\\s]{0,40}[\\s/]+from\\b"
  			},
  			{
- 				"id": "215",
+ 				"id": "214",
  				"mz": "$u_request_uri",
  				"rx": "/utility\\.cgi\\?.{0,30}\\btestType=.{0,30}\\bIP=[^\u0026=]{1,30}\\s\\|{2}[^\u0026]{5}"
  			},
  			{
- 				"id": "216",
+ 				"id": "215",
  				"mz": "$u_request_uri",
  				"rx": "/apply\\.cgi\\?.{0,150}\\bcurrent_page=Main_Analysis_Content\\.asp.{0,400}\\bdestIP=[^=\u0026]{0,20}(;|\\|{2})"
  			},
  			{
- 				"id": "217",
+ 				"id": "216",
  				"mz": "$u_get_value,$u_d_get_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,15}([\\s'\"\\)]|/\\*.{0,20}\\*/\\s*)(\\b(and|or(\\s+not)?)\\b|(\u0026\u0026|\\|{2}))(\\s+\\(?|\\(|\\s*/\\*.{0,20}\\*/\\s*)([\\x20-\\x80\\s]{0,10}\\b(left|right|substring|substr|mid)\\([\\x20-\\x80\\s]{3,150},\\s*\\d+\\s*\\)+\\s*[=\u003c\u003e][\\x20-\\x80\\s]{2,30}|[\\x20-\\x80\\s]{2,30}[=\u003c\u003e][\\x20-\\x80\\s]{0,10}(left|right|substring|substr|mid)\\([\\x20-\\x80\\s]{3,15},\\s*\\d+\\s*\\))(\\s|\\-\\-|\\x23|/\\*.{0,20}\\*/){0,10}\\s*[\\w\\+]{0,150}$"
  			},
  			{
- 				"id": "218",
+ 				"id": "217",
  				"mz": "$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,15}[\"';\\(`]\\s*(create|drop)\\s+table\\s+\\w{1,30}\\b"
  			},
  			{
- 				"id": "219",
+ 				"id": "218",
  				"mz": "$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,15}\\b(and|or)\\b\\s*[\\x20-\\x80\\s]{1,50}\\([\\x20-\\x80\\s]{0,20}\\bis_(srvrolemember|member)\\(\\s*['\"]\\w"
  			},
  			{
- 				"id": "220",
+ 				"id": "219",
  				"mz": "$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,80}\\bselect\\s[\\x20-\\x80\\s]{1,50}from\\s+\\w{1,20}\\.{2}sys(altfiles|charsets|configures|curconfigs|databases|languages|logins|oledbusers|processes|remotelogins|columns|constrains|filegroups|files|foreignkeys|indexs|menbers|objects|permissions|types|users)\\b"
  			},
  			{
- 				"id": "221",
+ 				"id": "220",
  				"mz": "$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_request_uri,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,50}(;|\\(|\\)|,|\\*/)\\s*select(\\s+|\\()top(\\s+\\(?\\d+(\\.\\d+)?\\)?|\\(\\d+(\\.\\d+)?\\))\\s([\\x20-\\x80]{1,120})\\sfrom\\s\\w{2}"
  			},
  			{
- 				"id": "222",
+ 				"id": "221",
  				"mz": "$u_get_value,$u_d_get_value,$u_post_value,$u_d_post_value,$u_request_uri,$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{0,30}\\b(select|and|or)\\s+(db_name|object_id|col_(name|length))\\(([\\x20-\\x80]{0,30}['\"][\\x20-\\x80]{0,20}['\"]\\s*)?\\)"
  			},
  			{
- 				"id": "223",
+ 				"id": "222",
  				"mz": "$u_request_body,$u_post_value,$u_get_value",
  				"rx": "^.{10,300}\\bconstructor\\(\"return\\s+process\"\\)\\(\\s*\\).{0,150}\\.require\\(\"child_process\"\\)\\.execSync\\(\""
  			},
  			{
- 				"id": "224",
+ 				"id": "223",
  				"mz": "$u_request_uri,$request_uri",
  				"rx": "/\\.\\./vpns/[\\w\\.\\-\\_]{3}"
  			},
  			{
- 				"id": "225",
+ 				"id": "224",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "^[\\x20-\\x80\\s]{0,150}%.?\\btemplate\\.new\\(\\{[\\x20-\\x80\\s]{3,180}\\|[\\x20-\\x80\\s]{3,60}\\.xml\\b\\s*\\x5c?['\"]\\s*\\)"
  			},
  			{
- 				"id": "226",
+ 				"id": "225",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_get_value,$u_http_referer,$u_http_user_agent,$u_post_value",
  				"rx": "^.{0,150}[:\\[\\{]\\s{0,8}['\"]((com\\.sun\\.)?org\\.apache\\.xbean\\.propertyeditor\\.JndiConverter|br\\.com\\.anteros\\.dbcp\\.AnterosDBCPConfig|com\\.ibatis\\.sqlmap\\.engine\\.transaction\\.jta\\.JtaTransactionConfig)['\"]\\s{0,5},.{1,20}\\{\\s{0,10}['\"][\\x20-\\x80\\s]{0,40}((\\d{1,3}\\.){3}\\d{1,3}\\b|\\/|\\w{3}\\.\\w{2})"
  			},
  			{
- 				"id": "227",
+ 				"id": "226",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_get_value,$u_http_referer,$u_http_user_agent,$u_post_value",
  				"rx": "^[\\x20-\\x80\\s]{0,50}\\bdata:(//)?\\s?(text|image)\\s?/\\s?(\\w{3,10}|x-icon)\\s?,\\s{0,20}\u003c\\?\\s{0,10}php\\b"
  			},
  			{
- 				"id": "228",
+ 				"id": "227",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "^file://\\w{1,10}:?/[\\w_\\-\\.]{1,20}/[\\x20-\\x80]{1,150}$"
  			},
  			{
- 				"id": "229",
+ 				"id": "228",
  				"mz": "$u_get_value",
  				"rx": "^phar://[\\x20-\\x80]{1,150}$"
  			},
  			{
- 				"id": "230",
+ 				"id": "229",
  				"mz": "$u_post_value",
  				"rx": "^phar://[\\x20-\\x80]{1,150}$"
  			},
  			{
- 				"id": "231",
+ 				"id": "230",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "^zip://\\w{1,10}:?/[\\w_\\-\\.]{1,20}/[\\x20-\\x80]{1,150}#[\\w_\\-\\.]{1,40}$"
  			},
  			{
- 				"id": "232",
+ 				"id": "231",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "^[\\x20-\\x80\\s]{0,100}\\bconvert\\.base64\\-(en|de)code/resource\\b"
  			},
  			{
- 				"id": "233",
+ 				"id": "232",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "^php://filter/[\\x20-\\x80]{1,200}$"
  			},
  			{
- 				"id": "234",
+ 				"id": "233",
  				"mz": "$u_args_value",
  				"rx": "\\bt?ftp://([\\w\\./]{5,30}|(\\d{1,3}\\.){3}\\d{1,3})(:\\d{1,4})?[\\w\\./]{1,40}\\.(php.?|exe)($|\\s*;)"
  			},
  			{
- 				"id": "235",
+ 				"id": "234",
  				"mz": "$u_get_value,$u_request_uri",
  				"rx": "^[\\x20-\\x80]{4,30}/\\.ssh/id_rsa($|\\s*;)"
  			},
  			{
- 				"id": "236",
+ 				"id": "235",
  				"mz": "$u_get_value,$u_post_value,$u_request_uri",
  				"rx": "^(/usr/local/app/php\\d?/lib/php\\.ini|/etc/httpd/conf/httpd\\.conf|/etc/my\\.conf)(\\s*$|\\s*;)"
  			},
  			{
- 				"id": "237",
+ 				"id": "236",
  				"mz": "$u_request_uri,$file_name",
  				"rx": "^[\\w\\.\\-_/\\\\]{1,50}\\.(exe|jsp|asp|php|js|sh|java|py|go|pl|rb|sys|com|ios|apk)\\%00[\\w\\.\\-_]{1,20}\\.[a-z]{2,4}\\s{0,5}$"
  			},
  			{
- 				"id": "238",
+ 				"id": "237",
  				"mz": "$u_get_value,$u_post_value",
  				"rx": "^\\s*C\\:\\\\Windows\\\\(System32\\\\[\\w\\.\\-_\\d\\\\/]{0,30}|system\\.ini)(\\s*;|\\s*$)"
  			},
  			{
- 				"id": "239",
+ 				"id": "238",
  				"mz": "$u_request_uri",
  				"rx": "/default\\.aspx\\?[\\x20-\\x80\\s]{0,130}(__VIEWSTATEGENERATOR=[\\x20-\\x80\\s]{1,130}\\\u0026\\x5f{2}VIEWSTATE=[a-z0-9\\/]{150}|__VIEWSTATE=[a-z0-9\\/]{150}[\\x20-\\x80\\s]{1,1000}\\\u0026\\x5f{2}VIEWSTATEGENERATOR=)"
  			},
  			{
- 				"id": "240",
+ 				"id": "239",
  				"mz": "$u_uri",
  				"rx": "^[\\x20-\\x80\\s]{1,100}\\.((jp[e]?g|bmp|gif|png|txt|tiff|fpx|ai|raw|ufo|exif|fpx|pcx|psd|cdr|pcd|dxf|raw|html|pht|phtml)/[\\x20-\\x80\\s]{0,25}\\.php|asp/[/\\w-]{1,25}\\.(?:jp[e]?g|bmp|gif|png|txt|tiff|fpx|ai|raw|ufo|exif|fpx|pcx|psd|cdr|pcd|dxf|raw|html|pht|phtml))$"
  			},
  			{
- 				"id": "241",
+ 				"id": "240",
  				"mz": "$u_request_body",
  				"rx": "^[\\x20-\\x80\\s]{0,50}\\burl\\b[\\x20-\\x80\\s]{1,40}((%c0%ae|\\\\xc0\\\\xae|\\.|%u002e){2}(%c0%af|\\\\xC0\\\\xAF|\\/|%c1%9c|\\\\xc1\\\\x9c|\\\\|%u2215|%u2216|%255c|%252f)){2}"
  			},
  			{
- 				"id": "242",
+ 				"id": "241",
  				"mz": "$u_request_uri,$u_uri,$u_get_value,$u_cookie_value",
  				"rx": "\u003cdetails\\s+(open\\s+)?ontoggle\\s*=[^\\r\\n]{1,200}\\("
  			},
  			{
- 				"id": "243",
+ 				"id": "242",
  				"mz": "$u_post_value",
  				"rx": "^.{0,100}\u003cdetails\\s+(open\\s+)?ontoggle\\s*=[^\\r\\n]{1,30}\\("
  			},
  			{
- 				"id": "244",
+ 				"id": "243",
  				"mz": "$u_request_uri,$u_args_value,$u_request_body",
  				"rx": "^.{0,300}\\{\\s{0,10}\"script\"\\s{0,10}:\\s{0,10}\"[\\x20-\\x80\\s]{1,50}\\w{30}[\\x20-\\x80\\s]{3,300},\\s{0,10}\"lang\"\\s{0,10}:\\s{0,10}\"groovy\""
  			},
  			{
- 				"id": "245",
+ 				"id": "244",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_get_value,$u_cookie_value",
+ 				"rx": "^[\\x20-\\x80\\s]{0,150}\\b(and|or|\\\u0026\\\u0026|\\|{2}|SELECT)\\b.{1,50}\\bMAKE_SET\\s{0,200}\\([\\x20-\\x80\\s]{1,200},"
+ 			},
+ 			{
+ 				"id": "245",
+ 				"mz": "$u_post_value,$u_request_body",
  				"rx": "^[\\x20-\\x80\\s]{0,150}\\b(and|or|\\\u0026\\\u0026|\\|{2}|SELECT)\\b.{1,50}\\bMAKE_SET\\s{0,200}\\([\\x20-\\x80\\s]{1,200},"
  			},
  			{
  				"id": "246",
- 				"mz": "$u_post_value,$u_request_body",
- 				"rx": "^[\\x20-\\x80\\s]{0,150}\\b(and|or|\\\u0026\\\u0026|\\|{2}|SELECT)\\b.{1,50}\\bMAKE_SET\\s{0,200}\\([\\x20-\\x80\\s]{1,200},"
- 			},
- 			{
- 				"id": "247",
  				"mz": "$u_request_headers,$u_request_uri,$u_uri,$u_get_value,$u_cookie_value",
  				"rx": "^[^\"]{1,100}\"\\s{0,100}(\\sx?or\\s|\\sand\\s|\\\u0026{2}|\\|{2}|\\^)\\s{0,100}\"?.{0,250}([^\\-]\\-{2}|\\#)([^\\-].{0,100})?$"
  			},
  			{
- 				"id": "248",
+ 				"id": "247",
  				"mz": "$u_request_headers,$u_request_uri,$u_get_value",
  				"rx": "^.{0,100}\\%\\{\\(?.{0,300}\\(\\#\\s{0,50}[\\w\\d\\-]{1,50}\\s{0,50}=\\s{0,50}\\#.{1,200}\\b(org\\.apache|com\\.sun)\\b.{1,300}\\.\\(\\#\\s{0,50}[\\w\\d\\-]{1,50}\\s{0,50}=\\s{0,50}\\#.{1,200}\\b(org\\.apache|com\\.sun)\\b"
  			},
  			{
- 				"id": "249",
+ 				"id": "248",
  				"mz": "$u_request_headers,$u_request_uri,$u_get_value",
  				"rx": "^.{0,100}\\%\\{.{0,250}\\)\\.\\(\\s{0,50}\\#\\s{0,50}[\\w\\d\\-]{1,50}\\s{0,50}=\\s{0,50}\\#.{1,100}['\"].{10,60}['\"].{1,300}DataSourceName\\b.{0,10}['\"]\\s{0,50}(ldap|rmi)://"
  			},
  			{
- 				"id": "250",
+ 				"id": "249",
  				"mz": "$u_request_headers,$u_request_uri,$u_get_value",
  				"rx": "\\bjdbc\\s{0,50}:\\s{0,50}mysql\\:.{1,5}[\\w\\.\\-]{3,300}\\:\\d{2,5}\\/[^\\?]{1,200}?.{0,300}\\bautoDeserialize\\s{0,50}=\\s{0,50}true\\b"
  			},
  			{
- 				"id": "251",
+ 				"id": "250",
  				"mz": "$u_post_value",
  				"rx": "\\bjdbc\\s{0,50}:\\s{0,50}mysql\\:.{1,5}[\\w\\.\\-]{3,300}\\:\\d{2,5}\\/[^\\?]{1,200}?.{0,300}\\bautoDeserialize\\s{0,50}=\\s{0,50}true\\b"
  			},
  			{
- 				"id": "252",
+ 				"id": "251",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "^.{0,300}[\\[|:]\\\"\\s{0,20}(br\\.com\\.anteros\\.dbcp\\.AnterosDBCPConfig|br\\.com\\.anteros\\.dbcp\\.AnterosDBCPDataSource|ch\\.qos\\.logback\\.core\\.db\\.DriverManagerConnectionSource|ch\\.qos\\.logback\\.core\\.db\\.JNDIConnectionSource|com\\.caucho\\.config\\.types\\.ResourceRef|com\\.ibatis\\.sqlmap\\.engine\\.transaction\\.jta\\.JtaTransactionConfig|com\\.mysql\\.cj\\.jdbc\\.admin\\.MiniAdmin|com\\.newrelic\\.agent\\.deps\\.ch\\.qos\\.logback\\.core\\.db\\.DriverManagerConnectionSource|com\\.newrelic\\.agent\\.deps\\.ch\\.qos\\.logback\\.core\\.db\\.JNDIConnectionSource|com\\.nqadmin\\.rowset\\.JdbcRowSetImpl|com\\.oracle\\.wls\\.shaded\\.org\\.apache\\.xalan\\.lib\\.sql\\.JNDIConnectionPool|com\\.pastdev\\.httpcomponents\\.configuration\\.JndiConfiguration|com\\.sun\\.deploy\\.security\\.ruleset\\.DRSHelper|com\\.sun\\.org\\.apache\\.bcel\\.internal\\.util\\.ClassLoader|com\\.sun\\.org\\.apache\\.xalan\\.internal\\.lib\\.sql\\.JNDIConnectionPool|com\\.sun\\.org\\.apache\\.xalan\\.internal\\.xsltc\\.trax\\.TemplatesImpl|com\\.sun\\.rowset\\.JdbcRowSetImpl|com\\.zaxxer\\.hikari\\.HikariConfig|com\\.zaxxer\\.hikari\\.HikariDataSource|flex\\.messaging\\.util\\.concurrent\\.AsynchBeansWorkManagerExecutor|java\\.rmi\\.server\\.UnicastRemoteObject|java\\.util\\.logging\\.FileHandler|javax\\.swing\\.JEditorPane|javax\\.swing\\.JTextPane|jodd\\.db\\.connection\\.DataSourceConnectionProvider|net\\.sf\\.ehcache\\.hibernate\\.EhcacheJtaTransactionManagerLookup|net\\.sf\\.ehcache\\.transaction\\.manager\\.DefaultTransactionManagerLookup|net\\.sf\\.ehcache\\.transaction\\.manager\\.selector\\.GenericJndiSelector|net\\.sf\\.ehcache\\.transaction\\.manager\\.selector\\.GlassfishSelector|oadd\\.org\\.apache\\.commons\\.dbcp\\.cpdsadapter\\.DriverAdapterCPDS)\\s{0,20}\\\".{1,200}\"\\s{0,20}(rmi|ldap|jdbc)\\s{0,20}:"
  			},
  			{
- 				"id": "253",
+ 				"id": "252",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "^.{0,300}\\\"\\s{0,20}(oadd\\.org\\.apache\\.commons\\.dbcp\\.datasources\\.PerUserPoolDataSource|oadd\\.org\\.apache\\.commons\\.dbcp\\.datasources\\.SharedPoolDataSource|oadd\\.org\\.apache\\.xalan\\.lib\\.sql\\.JNDIConnectionPool|oracle\\.jdbc\\.connector\\.OracleManagedConnectionFactory|oracle\\.jdbc\\.rowset\\.OracleJDBCRowSet|oracle\\.jms\\.AQjmsQueueConnectionFactory|oracle\\.jms\\.AQjmsTopicConnectionFactory|oracle\\.jms\\.AQjmsXAConnectionFactory|oracle\\.jms\\.AQjmsXAQueueConnectionFactory|oracle\\.jms\\.AQjmsXATopicConnectionFactory|org\\.aoju\\.bus\\.proxy\\.provider\\.remoting\\.RmiProvider|org\\.aoju\\.bus\\.proxy\\.provider\\.RmiProvider|org\\.apache\\.activemq\\.ActiveMQXAConnectionFactory|org\\.apache\\.activemq\\.jms\\.pool\\.JcaPooledConnectionFactory|org\\.apache\\.activemq\\.jms\\.pool\\.XaPooledConnectionFactory|org\\.apache\\.activemq\\.pool\\.JcaPooledConnectionFactory|org\\.apache\\.activemq\\.pool\\.PooledConnectionFactory|org\\.apache\\.activemq\\.pool\\.XaPooledConnectionFactory|org\\.apache\\.activemq\\.spring\\.ActiveMQConnectionFactory|org\\.apache\\.activemq\\.spring\\.ActiveMQXAConnectionFactory|org\\.apache\\.aries\\.transaction\\.jms\\.internal\\.XaPooledConnectionFactory|org\\.apache\\.aries\\.transaction\\.jms\\.RecoverablePooledConnectionFactory|org\\.apache\\.axis2\\.jaxws\\.spi\\.handler\\.HandlerResolverImpl|org\\.apache\\.axis2\\.transport\\.jms\\.JMSOutTransportInfo|org\\.apache\\.commons\\.collections\\.functors\\.InstantiateTransformer|org\\.apache\\.commons\\.collections\\.functors\\.InvokerTransformer|org\\.apache\\.commons\\.collections4\\.functors\\.InstantiateTransformer|org\\.apache\\.commons\\.collections4\\.functors\\.InvokerTransformer|org\\.apache\\.commons\\.configuration\\.JNDIConfiguration|org\\.apache\\.commons\\.configuration2\\.JNDIConfiguration)\\s{0,20}\\\".{1,200}\"\\s{0,20}(rmi|ldap|jdbc)\\s{0,20}:"
  			},
  			{
- 				"id": "254",
+ 				"id": "253",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "^.{0,300}\\\"\\s{0,20}(org\\.apache\\.commons\\.dbcp\\.cpdsadapter\\.DriverAdapterCPDS|org\\.apache\\.commons\\.dbcp\\.datasources\\.PerUserPoolDataSource|org\\.apache\\.commons\\.dbcp\\.datasources\\.SharedPoolDataSource|org\\.apache\\.commons\\.dbcp2\\.cpdsadapter\\.DriverAdapterCPDS|org\\.apache\\.commons\\.dbcp2\\.datasources\\.PerUserPoolDataSource|org\\.apache\\.commons\\.dbcp2\\.datasources\\.SharedPoolDataSource|org\\.apache\\.commons\\.jelly\\.impl\\.Embedded|org\\.apache\\.commons\\.proxy\\.provider\\.remoting\\.RmiProvider|org\\.apache\\.cxf\\.jaxrs\\.provider\\.XSLTJaxbProvider|org\\.apache\\.hadoop\\.shaded\\.com\\.zaxxer\\.hikari\\.HikariConfig|org\\.apache\\.ibatis\\.datasource\\.jndi\\.JndiDataSourceFactory|org\\.apache\\.ibatis\\.parsing\\.XPathParser|org\\.apache\\.ignite\\.cache\\.jta\\.jndi\\.CacheJndiTmFactory|org\\.apache\\.ignite\\.cache\\.jta\\.jndi\\.CacheJndiTmLookup|org\\.apache\\.log4j\\.receivers\\.db\\.DriverManagerConnectionSource|org\\.apache\\.log4j\\.receivers\\.db\\.JNDIConnectionSource|org\\.apache\\.openjpa\\.ee\\.JNDIManagedRuntime|org\\.apache\\.openjpa\\.ee\\.RegistryManagedRuntime|org\\.apache\\.openjpa\\.ee\\.WASRegistryManagedRuntime|org\\.apache\\.shiro\\.jndi\\.JndiObjectFactory|org\\.apache\\.shiro\\.realm\\.jndi\\.JndiRealmFactory|org\\.apache\\.tomcat\\.dbcp\\.dbcp\\.cpdsadapter\\.DriverAdapterCPDS|org\\.apache\\.tomcat\\.dbcp\\.dbcp\\.datasources\\.PerUserPoolDataSource|org\\.apache\\.tomcat\\.dbcp\\.dbcp\\.datasources\\.SharedPoolDataSource|org\\.apache\\.tomcat\\.dbcp\\.dbcp2\\.BasicDataSource|org\\.apache\\.tomcat\\.dbcp\\.dbcp2\\.cpdsadapter\\.DriverAdapterCPDS|org\\.apache\\.tomcat\\.dbcp\\.dbcp2\\.datasources\\.PerUserPoolDataSource|org\\.apache\\.tomcat\\.dbcp\\.dbcp2\\.datasources\\.SharedPoolDataSource|org\\.apache\\.xalan\\.lib\\.sql\\.JNDIConnectionPool|org\\.apache\\.xalan\\.xsltc\\.trax\\.TemplatesImpl)\\s{0,20}\\\".{1,200}\"\\s{0,20}(rmi|ldap|jdbc)\\s{0,20}:"
  			},
  			{
- 				"id": "255",
+ 				"id": "254",
  				"mz": "$u_post_value,$u_request_body",
  				"rx": "^.{0,300}\\\"\\s{0,20}(org\\.apache\\.xbean\\.propertyeditor\\.JndiConverter|org\\.arrah\\.framework\\.rdbms\\.UpdatableJdbcRowsetImpl|org\\.codehaus\\.groovy\\.runtime\\.ConvertedClosure|org\\.codehaus\\.groovy\\.runtime\\.MethodClosure|org\\.docx4j\\.org\\.apache\\.xalan\\.lib\\.sql\\.JNDIConnectionPool|org\\.hibernate\\.jmx\\.StatisticsService|org\\.jboss\\.util\\.propertyeditor\\.DocumentEditor|org\\.jdom\\.transform\\.XSLTransformer|org\\.jdom2\\.transform\\.XSLTransformer|org\\.jsecurity\\.realm\\.jndi\\.JndiRealmFactory|org\\.quartz\\.utils\\.JNDIConnectionProvider|org\\.slf4j\\.ext\\.EventData|org\\.springframework\\.aop\\.config\\.MethodLocatingFactoryBean|org\\.springframework\\.beans\\.factory\\.config\\.BeanReferenceFactoryBean|org\\.springframework\\.beans\\.factory\\.config\\.PropertyPathFactoryBean|org\\.springframework\\.beans\\.factory\\.ObjectFactory)\\s{0,20}\\\".{1,200}\"\\s{0,20}(rmi|ldap|jdbc)\\s{0,20}:"
  			},
  			{
- 				"id": "256",
+ 				"id": "255",
  				"mz": "$u_uri,$u_request_uri",
  				"rx": "[\\x0d\\x0a]\\s{0,10}\u003c\\s{0,20}.{0,30}\\bmeta\\s[^\u003e]{0,100}charset\\s{0,20}=\\s{0,20}ISO-2022-KR\\b.{0,200}\\x0f"
  			},
  			{
- 				"id": "257",
+ 				"id": "256",
  				"mz": "$u_uri,$u_request_uri",
  				"rx": "[\\x0d\\x0a]\\s{0,10}X-XSS-Protection\\s{0,20}:\\s{0,20}0\\b"
  			},
  			{
- 				"id": "258",
+ 				"id": "257",
  				"mz": "$file_content",
  				"rx": "\u003c\\s{0,5}(java\\.beans\\.EventHandler|java\\.lang\\.ProcessBuilder|javax\\.imageio\\.ImageIO\\$ContainsFilter|jdk\\.nashorn\\.internal\\.objects\\.NativeString|com\\.sun\\.corba\\.se\\.impl\\.activation\\.ServerTableEntry|com\\.sun\\.tools\\.javac\\.processing\\.JavacProcessingEnvironment\\$NameProcessIterator|sun\\.awt\\.datatransfer\\.DataTransferer\\$IndexOrderComparator|sun\\.swing\\.SwingLazyValue)\\s{0,5}\u003e"
  			},
  			{
- 				"id": "259",
+ 				"id": "258",
  				"mz": "$file_content",
  				"rx": "\u003c[^\u003e]{1,50}\\sclass\\s{0,10}=\\s{0,10}['\"](java\\.beans\\.EventHandler|java\\.lang\\.ProcessBuilder|javax\\.imageio\\.ImageIO\\$ContainsFilter|jdk\\.nashorn\\.internal\\.objects\\.NativeString|com\\.sun\\.corba\\.se\\.impl\\.activation\\.ServerTableEntry|com\\.sun\\.tools\\.javac\\.processing\\.JavacProcessingEnvironment\\$NameProcessIterator|sun\\.awt\\.datatransfer\\.DataTransferer\\$IndexOrderComparator|sun\\.swing\\.SwingLazyValue)['\"]"
  			},
  			{
- 				"id": "260",
+ 				"id": "259",
  				"mz": "$file_content",
  				"rx": "\u003c[^\u003e]{1,50}\\sclass\\s{0,10}=\\s{0,10}['\"](javafx\\.collections\\.ObservableList\\$[^\u003e\\s'\"]{1,30}|[^\u003e\\s'\"]{1,50}\\.bcel\\.[^\u003e\\s'\"]{1,30}\\.util\\.ClassLoader|[\\.a-zA-Z]{20,60}\\$(ServiceNameIterator|LazyIterator|PrivilegedGetter|GetterSetterReflection))['\"]"
  			},
  			{
- 				"id": "261",
+ 				"id": "260",
  				"mz": "$u_uri,$u_request_uri",
  				"rx": "\\.php/module/action[\\w\\/]{5,40}/\\$\\{@\\w{3,30}\\("
  			},
  			{
- 				"id": "262",
+ 				"id": "261",
  				"mz": "$u_uri",
  				"rx": "^/(backup|sql|data|db|www|package|log|wwwroot)(\\d{0,2}|\\(\\d{0,2}\\))\\.(rar|zip|7z|tgz)$"
  			},
  			{
- 				"id": "263",
+ 				"id": "262",
  				"mz": "$u_request_headers",
  				"rx": "\\bdoar-e\\s{0,3},\\s{0,3}ftw\\s{0,3},\\s{0,3}imo\\s{0,3},\\s{0,3},"
  			},
  			{
- 				"id": "264",
+ 				"id": "263",
  				"mz": "$u_request_body,$u_post_value",
  				"rx": "const\\s{1,10}sandbox\\s{0,10}=.{1,100}FunctionConstructor\\s{0,10}=\\s{0,10}ObjectConstructor\\.constructor.{1,100}=\\s{0,10}process\\.mainModule\\.require\\(.?\\\"child_process.?\\\"\\)\\.execSync\\(.{10,80}\\bis\\_mock\\_open\\b"
  			},
  			{
- 				"id": "265",
+ 				"id": "264",
  				"mz": "$u_get_value",
  				"rx": "^([\\x20-\\x80]{0,20}\u003c\\?\\s*(php)?[\\x20-\\x80]{0,20}\\b(exec\\(\\s*['\"][\\x20-\\x80]{0,20}\\bwget\\s+http://|file_put_contents\\([\\x20-\\x80]{0,20}\\.php\\b)|\\$_[a-z][\\w\\s]{0,12}\\[\\s*['\"][\\w_]{1,15}['\"]\\s*\\]\\s*;)"
  			}
@@ -1707,624 +1702,620 @@
  				"policy": "110"
  			},
  			{
- 				"id": "10134",
+ 				"id": "10135",
  				"policy": "111"
  			},
  			{
- 				"id": "10135",
+ 				"id": "10138",
  				"policy": "112"
  			},
  			{
- 				"id": "10138",
+ 				"id": "10139",
  				"policy": "113"
  			},
  			{
- 				"id": "10139",
+ 				"id": "10140",
  				"policy": "114"
  			},
  			{
- 				"id": "10140",
+ 				"id": "10141",
  				"policy": "115"
  			},
  			{
- 				"id": "10141",
+ 				"id": "10142",
  				"policy": "116"
  			},
  			{
- 				"id": "10142",
+ 				"id": "10143",
  				"policy": "117"
  			},
  			{
- 				"id": "10143",
+ 				"id": "10144",
  				"policy": "118"
  			},
  			{
- 				"id": "10144",
+ 				"id": "10145",
  				"policy": "119"
  			},
  			{
- 				"id": "10145",
+ 				"id": "10146",
  				"policy": "120"
  			},
  			{
- 				"id": "10146",
+ 				"id": "10147",
  				"policy": "121"
  			},
  			{
- 				"id": "10147",
+ 				"id": "10148",
  				"policy": "122"
  			},
  			{
- 				"id": "10148",
+ 				"id": "10149",
  				"policy": "123"
  			},
  			{
- 				"id": "10149",
+ 				"id": "10150",
  				"policy": "124"
  			},
  			{
- 				"id": "10150",
+ 				"id": "10151",
  				"policy": "125"
  			},
  			{
- 				"id": "10151",
+ 				"id": "10152",
  				"policy": "126"
  			},
  			{
- 				"id": "10152",
+ 				"id": "10153",
  				"policy": "127"
  			},
  			{
- 				"id": "10153",
+ 				"id": "10154",
  				"policy": "128"
  			},
  			{
- 				"id": "10154",
+ 				"id": "10155",
  				"policy": "129"
  			},
  			{
- 				"id": "10155",
+ 				"id": "10156",
  				"policy": "130"
  			},
  			{
- 				"id": "10156",
+ 				"id": "10157",
  				"policy": "131"
  			},
  			{
- 				"id": "10157",
+ 				"id": "10158",
  				"policy": "132"
  			},
  			{
- 				"id": "10158",
+ 				"id": "10159",
  				"policy": "133"
  			},
  			{
- 				"id": "10159",
+ 				"id": "10160",
  				"policy": "134"
  			},
  			{
- 				"id": "10160",
+ 				"id": "10161",
  				"policy": "135"
  			},
  			{
- 				"id": "10161",
+ 				"id": "10162",
  				"policy": "136"
  			},
  			{
- 				"id": "10162",
+ 				"id": "10163",
  				"policy": "137"
  			},
  			{
- 				"id": "10163",
+ 				"id": "10164",
  				"policy": "138"
  			},
  			{
- 				"id": "10164",
+ 				"id": "10165",
  				"policy": "139"
  			},
  			{
- 				"id": "10165",
+ 				"id": "10166",
  				"policy": "140"
  			},
  			{
- 				"id": "10166",
+ 				"id": "10167",
  				"policy": "141"
  			},
  			{
- 				"id": "10167",
+ 				"id": "10168",
  				"policy": "142"
  			},
  			{
- 				"id": "10168",
+ 				"id": "10169",
  				"policy": "143"
  			},
  			{
- 				"id": "10169",
+ 				"id": "10170",
  				"policy": "144"
  			},
  			{
- 				"id": "10170",
+ 				"id": "10171",
  				"policy": "145"
  			},
  			{
- 				"id": "10171",
+ 				"id": "10172",
  				"policy": "146"
  			},
  			{
- 				"id": "10172",
+ 				"id": "10173",
  				"policy": "147"
  			},
  			{
- 				"id": "10173",
+ 				"id": "10174",
  				"policy": "148"
  			},
  			{
- 				"id": "10174",
+ 				"id": "10175",
  				"policy": "149"
  			},
  			{
- 				"id": "10175",
+ 				"id": "10184",
  				"policy": "150"
  			},
  			{
- 				"id": "10184",
+ 				"id": "10185",
  				"policy": "151"
  			},
  			{
- 				"id": "10185",
+ 				"id": "10186",
  				"policy": "152"
  			},
  			{
- 				"id": "10186",
+ 				"id": "10187",
  				"policy": "153"
  			},
  			{
- 				"id": "10187",
+ 				"id": "10188",
  				"policy": "154"
  			},
  			{
- 				"id": "10188",
+ 				"id": "10189",
  				"policy": "155"
  			},
  			{
- 				"id": "10189",
+ 				"id": "10190",
  				"policy": "156"
  			},
  			{
- 				"id": "10190",
+ 				"id": "10191",
  				"policy": "157"
  			},
  			{
- 				"id": "10191",
+ 				"id": "10192",
  				"policy": "158"
  			},
  			{
- 				"id": "10192",
+ 				"id": "10193",
  				"policy": "159"
  			},
  			{
- 				"id": "10193",
+ 				"id": "10195",
  				"policy": "160"
  			},
  			{
- 				"id": "10195",
+ 				"id": "10196",
  				"policy": "161"
  			},
  			{
- 				"id": "10196",
+ 				"id": "10197",
  				"policy": "162"
  			},
  			{
- 				"id": "10197",
+ 				"id": "10198",
  				"policy": "163"
  			},
  			{
- 				"id": "10198",
+ 				"id": "10199",
  				"policy": "164"
  			},
  			{
- 				"id": "10199",
+ 				"id": "10200",
  				"policy": "165"
  			},
  			{
- 				"id": "10200",
+ 				"id": "10201",
  				"policy": "166"
  			},
  			{
- 				"id": "10201",
+ 				"id": "10202",
  				"policy": "167"
  			},
  			{
- 				"id": "10202",
+ 				"id": "10203",
  				"policy": "168"
  			},
  			{
- 				"id": "10203",
+ 				"id": "10205",
  				"policy": "169"
  			},
  			{
- 				"id": "10205",
+ 				"id": "10206",
  				"policy": "170"
  			},
  			{
- 				"id": "10206",
+ 				"id": "10207",
  				"policy": "171"
  			},
  			{
- 				"id": "10207",
+ 				"id": "10208",
  				"policy": "172"
  			},
  			{
- 				"id": "10208",
+ 				"id": "10209",
  				"policy": "173"
  			},
  			{
- 				"id": "10209",
+ 				"id": "10210",
  				"policy": "174"
  			},
  			{
- 				"id": "10210",
+ 				"id": "10211",
  				"policy": "175"
  			},
  			{
- 				"id": "10211",
+ 				"id": "10212",
  				"policy": "176"
  			},
  			{
- 				"id": "10212",
+ 				"id": "10213",
  				"policy": "177"
  			},
  			{
- 				"id": "10213",
+ 				"id": "10214",
  				"policy": "178"
  			},
  			{
- 				"id": "10214",
+ 				"id": "10215",
  				"policy": "179"
  			},
  			{
- 				"id": "10215",
+ 				"id": "10216",
  				"policy": "180"
  			},
  			{
- 				"id": "10216",
+ 				"id": "10217",
  				"policy": "181"
  			},
  			{
- 				"id": "10217",
+ 				"id": "10218",
  				"policy": "182"
  			},
  			{
- 				"id": "10218",
+ 				"id": "10219",
  				"policy": "183"
  			},
  			{
- 				"id": "10219",
+ 				"id": "10220",
  				"policy": "184"
  			},
  			{
- 				"id": "10220",
+ 				"id": "10224",
  				"policy": "185"
  			},
  			{
- 				"id": "10224",
+ 				"id": "10225",
  				"policy": "186"
  			},
  			{
- 				"id": "10225",
+ 				"id": "10226",
  				"policy": "187"
  			},
  			{
- 				"id": "10226",
+ 				"id": "10227",
  				"policy": "188"
  			},
  			{
- 				"id": "10227",
+ 				"id": "10228",
  				"policy": "189"
  			},
  			{
- 				"id": "10228",
+ 				"id": "10229",
  				"policy": "190"
  			},
  			{
- 				"id": "10229",
+ 				"id": "10230",
  				"policy": "191"
  			},
  			{
- 				"id": "10230",
+ 				"id": "10242",
  				"policy": "192"
  			},
  			{
- 				"id": "10242",
+ 				"id": "10243",
  				"policy": "193"
  			},
  			{
- 				"id": "10243",
+ 				"id": "10244",
  				"policy": "194"
  			},
  			{
- 				"id": "10244",
+ 				"id": "10245",
  				"policy": "195"
  			},
  			{
- 				"id": "10245",
+ 				"id": "10247",
  				"policy": "196"
  			},
  			{
- 				"id": "10247",
+ 				"id": "10248",
  				"policy": "197"
  			},
  			{
- 				"id": "10248",
+ 				"id": "10249",
  				"policy": "198"
  			},
  			{
- 				"id": "10249",
+ 				"id": "10250",
  				"policy": "199"
  			},
  			{
- 				"id": "10250",
+ 				"id": "10256",
  				"policy": "200"
  			},
  			{
- 				"id": "10256",
+ 				"id": "10257",
  				"policy": "201"
  			},
  			{
- 				"id": "10257",
+ 				"id": "10258",
  				"policy": "202"
  			},
  			{
- 				"id": "10258",
+ 				"id": "10259",
  				"policy": "203"
  			},
  			{
- 				"id": "10259",
+ 				"id": "10260",
  				"policy": "204"
  			},
  			{
- 				"id": "10260",
+ 				"id": "10261",
  				"policy": "205"
  			},
  			{
- 				"id": "10261",
+ 				"id": "10262",
  				"policy": "206"
  			},
  			{
- 				"id": "10262",
+ 				"id": "10263",
  				"policy": "207"
  			},
  			{
- 				"id": "10263",
+ 				"id": "10264",
  				"policy": "208"
  			},
  			{
- 				"id": "10264",
+ 				"id": "10267",
  				"policy": "209"
  			},
  			{
- 				"id": "10267",
+ 				"id": "10269",
  				"policy": "210"
  			},
  			{
- 				"id": "10269",
+ 				"id": "10271",
  				"policy": "211"
  			},
  			{
- 				"id": "10271",
+ 				"id": "10272",
  				"policy": "212"
  			},
  			{
- 				"id": "10272",
+ 				"id": "10273",
  				"policy": "213"
  			},
  			{
- 				"id": "10273",
+ 				"id": "10274",
  				"policy": "214"
  			},
  			{
- 				"id": "10274",
+ 				"id": "10275",
  				"policy": "215"
  			},
  			{
- 				"id": "10275",
+ 				"id": "10276",
  				"policy": "216"
  			},
  			{
- 				"id": "10276",
+ 				"id": "10279",
  				"policy": "217"
  			},
  			{
- 				"id": "10279",
+ 				"id": "10280",
  				"policy": "218"
  			},
  			{
- 				"id": "10280",
+ 				"id": "10281",
  				"policy": "219"
  			},
  			{
- 				"id": "10281",
+ 				"id": "10282",
  				"policy": "220"
  			},
  			{
- 				"id": "10282",
+ 				"id": "10283",
  				"policy": "221"
  			},
  			{
- 				"id": "10283",
+ 				"id": "10285",
  				"policy": "222"
  			},
  			{
- 				"id": "10285",
+ 				"id": "10286",
  				"policy": "223"
  			},
  			{
- 				"id": "10286",
+ 				"id": "10287",
  				"policy": "224"
  			},
  			{
- 				"id": "10287",
+ 				"id": "10288",
  				"policy": "225"
  			},
  			{
- 				"id": "10288",
+ 				"id": "10289",
  				"policy": "226"
  			},
  			{
- 				"id": "10289",
+ 				"id": "10290",
  				"policy": "227"
  			},
  			{
- 				"id": "10290",
+ 				"id": "10291",
  				"policy": "228"
  			},
  			{
- 				"id": "10291",
+ 				"id": "10292",
  				"policy": "229"
  			},
  			{
- 				"id": "10292",
+ 				"id": "10293",
  				"policy": "230"
  			},
  			{
- 				"id": "10293",
+ 				"id": "10294",
  				"policy": "231"
  			},
  			{
- 				"id": "10294",
+ 				"id": "10295",
  				"policy": "232"
  			},
  			{
- 				"id": "10295",
+ 				"id": "10296",
  				"policy": "233"
  			},
  			{
- 				"id": "10296",
+ 				"id": "10297",
  				"policy": "234"
  			},
  			{
- 				"id": "10297",
+ 				"id": "10298",
  				"policy": "235"
  			},
  			{
- 				"id": "10298",
+ 				"id": "10299",
  				"policy": "236"
  			},
  			{
- 				"id": "10299",
+ 				"id": "10300",
  				"policy": "237"
  			},
  			{
- 				"id": "10300",
+ 				"id": "10302",
  				"policy": "238"
  			},
  			{
- 				"id": "10302",
+ 				"id": "10303",
  				"policy": "239"
  			},
  			{
- 				"id": "10303",
+ 				"id": "10305",
  				"policy": "240"
  			},
  			{
- 				"id": "10305",
+ 				"id": "10307",
  				"policy": "241"
  			},
  			{
- 				"id": "10307",
+ 				"id": "10308",
  				"policy": "242"
  			},
  			{
- 				"id": "10308",
+ 				"id": "10321",
  				"policy": "243"
  			},
  			{
- 				"id": "10321",
+ 				"id": "10336",
  				"policy": "244"
  			},
  			{
- 				"id": "10336",
+ 				"id": "10337",
  				"policy": "245"
  			},
  			{
- 				"id": "10337",
+ 				"id": "10340",
  				"policy": "246"
  			},
  			{
- 				"id": "10340",
+ 				"id": "10342",
  				"policy": "247"
  			},
  			{
- 				"id": "10342",
+ 				"id": "10344",
  				"policy": "248"
  			},
  			{
- 				"id": "10344",
+ 				"id": "10347",
  				"policy": "249"
  			},
  			{
- 				"id": "10347",
+ 				"id": "10348",
  				"policy": "250"
  			},
  			{
- 				"id": "10348",
+ 				"id": "10349",
  				"policy": "251"
  			},
  			{
- 				"id": "10349",
+ 				"id": "10350",
  				"policy": "252"
  			},
  			{
- 				"id": "10350",
+ 				"id": "10351",
  				"policy": "253"
  			},
  			{
- 				"id": "10351",
+ 				"id": "10352",
  				"policy": "254"
  			},
  			{
- 				"id": "10352",
+ 				"id": "10354",
  				"policy": "255"
  			},
  			{
- 				"id": "10354",
+ 				"id": "10355",
  				"policy": "256"
  			},
  			{
- 				"id": "10355",
+ 				"id": "10356",
  				"policy": "257"
  			},
  			{
- 				"id": "10356",
+ 				"id": "10357",
  				"policy": "258"
  			},
  			{
- 				"id": "10357",
+ 				"id": "10358",
  				"policy": "259"
  			},
  			{
- 				"id": "10358",
+ 				"id": "10360",
  				"policy": "260"
  			},
  			{
- 				"id": "10360",
+ 				"id": "10361",
  				"policy": "261"
  			},
  			{
- 				"id": "10361",
+ 				"id": "10363",
  				"policy": "262"
  			},
  			{
- 				"id": "10363",
+ 				"id": "10365",
  				"policy": "263"
  			},
  			{
- 				"id": "10365",
- 				"policy": "264"
- 			},
- 			{
  				"id": "11028",
- 				"policy": "265"
+ 				"policy": "264"
  			}
  		],
  		"PayloadEnEnv": {
