@@ -7,15 +7,39 @@ import (
 	"github.com/Knetic/govaluate"
 )
 
+func test_in_array() {
+	expr := "ip_hit_waf in (1, 2, 3, 'tet')"
+	expression, err := govaluate.NewEvaluableExpression(expr)
+	if err != nil {
+		log.Fatalln("err:", err.Error())
+	}
+
+	parameters := map[string]interface{}{
+		"ip_hit_waf": "tet",
+	}
+	result, err := expression.Evaluate(parameters)
+	if err != nil {
+		log.Fatalln("err:", err.Error())
+	}
+
+	log.Println("in test result:", result)
+
+}
+
 func test_basic() {
-	expr := "ip_hit_waf_score"
+	expr := "ip_hit_waf > 0 ? (ip_hit_waf + ip_4xx)/ip_total : 0"
+	//expr := "(ip_waf_ratio >= 0.5 ? 4 : 0) + (ip_waf_ratio >= 0.3 && ip_waf_ratio < 0.5 ? 3:0) + (ip_waf_ratio >= 0.2 && ip_waf_ratio < 0.3 ? 2:0) + (ip_waf_ratio >= 0.1 && ip_waf_ratio < 0.2 ? 1:0)"
 
 	expression, err := govaluate.NewEvaluableExpression(expr)
 	if err != nil {
 		log.Fatalln("err:", err.Error())
 	}
 
-	parameters := map[string]interface{}{"ip_hit_waf_score": 6}
+	parameters := map[string]interface{}{
+		"ip_hit_waf": 0,
+		"ip_4xx":     5,
+		"ip_total":   10,
+	}
 	result, err := expression.Evaluate(parameters)
 	if err != nil {
 		log.Fatalln("err:", err.Error())
@@ -69,4 +93,5 @@ func test_function() error {
 func main() {
 	test_basic()
 	test_function()
+	test_in_array()
 }
