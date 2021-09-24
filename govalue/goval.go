@@ -48,7 +48,7 @@ func test_in_array() {
 }
 
 func test_basic() {
-	expr := "(ip_hit_waf + ip_4xx)/ip_hit_waf"
+	expr := "(ip_hit_waf > 0) == false"
 	expression, err := govaluate.NewEvaluableExpression(expr)
 	if err != nil {
 		log.Fatalln("err:", err.Error())
@@ -63,7 +63,7 @@ func test_basic() {
 		log.Fatalln("err:", err.Error())
 	}
 
-	log.Println("result:", result)
+	log.Println("basic result:", result)
 
 }
 
