@@ -80,10 +80,13 @@ func init() {
 		default:
 		}
 		fmt.Println("func: F_field_days")
+		fmt.Println("args:", args)
 		fmt.Println("args[0]:", args[0])
 		fmt.Println("args[1]:", args[1])
 		fmt.Println("args[1]:", args[1])
 		fmt.Println("args[2]:", args[2])
+		fmt.Println("args[3]:", args[3])
+		fmt.Println("args[4]:", args[4])
 		length := len(args[0].(string))
 
 		return (float64)(length), nil
@@ -93,13 +96,17 @@ func init() {
 func test_function() error {
 
 	//eva F_field_score
-	expString := "F_field_days('ip_hit_waf',('L3', 'L2', 'L1'), (7,4,2))"
+	expString := "F_field_days('ip_hit_waf',('L3', 'L2', 'L1'), (7,4,2), hoststat,fieldstat)"
+
 	expression, err := govaluate.NewEvaluableExpressionWithFunctions(expString, functions)
 	if err != nil {
 		return err
 	}
-
-	result, err := expression.Evaluate(nil)
+	parameters := map[string]interface{}{
+		"hoststat":  4,
+		"fieldstat": 0,
+	}
+	result, err := expression.Evaluate(parameters)
 	if err != nil {
 		return err
 	}
