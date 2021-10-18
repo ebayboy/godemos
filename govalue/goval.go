@@ -48,15 +48,14 @@ func test_in_array() {
 }
 
 func test_basic() {
-	expr := "(ip_hit_waf > 0) == false"
+	expr := "ip_hit_waf < 0.01 && ip_hit_waf > 0"
 	expression, err := govaluate.NewEvaluableExpression(expr)
 	if err != nil {
 		log.Fatalln("err:", err.Error())
 	}
 
 	parameters := map[string]interface{}{
-		"ip_hit_waf": 3,
-		"ip_4xx":     8,
+		"ip_hit_waf": 0.001,
 	}
 	result, err := expression.Evaluate(parameters)
 	if err != nil {
@@ -64,7 +63,6 @@ func test_basic() {
 	}
 
 	log.Println("basic result:", result)
-
 }
 
 var functions map[string]govaluate.ExpressionFunction

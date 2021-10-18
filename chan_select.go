@@ -7,7 +7,6 @@ import (
 )
 
 // 10个协程处理1000个任务
-
 func main() {
 
 	ch := make(chan int)
@@ -31,13 +30,10 @@ func main() {
 				default:
 					time.Sleep(time.Second)
 					fmt.Println("default")
-
 				}
-
 			}
 
 		}()
-
 	}
 
 	go func() {
@@ -46,11 +42,9 @@ func main() {
 
 		}
 		close(ch)
-
 	}()
 
 	wg.Wait()
 
 	fmt.Println("hello")
-
 }
