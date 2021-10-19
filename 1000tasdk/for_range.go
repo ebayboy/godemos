@@ -54,7 +54,6 @@ func main() {
 	}()
 
 	wg.Wait()
-
 	close(outCh)
 
 	fmt.Println("Sum:", sum)
