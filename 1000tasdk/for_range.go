@@ -1,14 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 func main() {
 
-	go func(in <-chan int) {
-		// Using for-range to exit goroutine
-		// range has the ability to detect the close/end of a channel
-		for x := range in {
-			fmt.Printf("Process %d\n", x)
+	var wg sync.WaitGroup
+	inCh := make(chan int)
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func(in <-chan int) {
+			for x := range in {
+				fmt.Printf("Process %d\n", x)
+			}
+			wg.Done()
+		}(inCh)
+	}
+
+	go func() {
+		for i := 0; i < 1000; i++ {
+			inCh <- i
 		}
-	}(inCh)
+		close(inCh)
+	}()
+
+	wg.Wait()
 }
