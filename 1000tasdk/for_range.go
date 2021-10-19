@@ -6,10 +6,33 @@ import (
 	"time"
 )
 
-//问题： 使用10个协程对1-1000进行累加， 并输出累加后的总和
+//问题： 使用10个协程对1-1000进行累加， 并输出累加后的总和.
+//1. 使用goroutine + channel方式?
+//2. 使用互斥锁实现?
 
-func main() {
+func method2() int {
+	var wg sync.WaitGroup
+	sum := 0
+	var l sync.Mutex
 
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		l.Lock()
+		go func() {
+			for j := 0; j < 100; j++ {
+				sum += j
+			}
+			l.Unlock()
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
+	fmt.Println("method2 sum:", sum)
+	return sum
+}
+
+func method1() int {
 	var wg sync.WaitGroup
 
 	inCh := make(chan int)
@@ -57,4 +80,11 @@ func main() {
 	close(outCh)
 
 	fmt.Println("Sum:", sum)
+
+	return sum
+}
+
+func main() {
+	fmt.Println("methiod1:", method1())
+	fmt.Println("methiod2:", method2())
 }
