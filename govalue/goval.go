@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/Knetic/govaluate"
 )
@@ -48,14 +49,15 @@ func test_in_array() {
 }
 
 func test_basic() {
-	expr := "ip_hit_waf < 0.01 && ip_hit_waf > 0"
+	expr := "h_total/h_total_max_2d"
 	expression, err := govaluate.NewEvaluableExpression(expr)
 	if err != nil {
 		log.Fatalln("err:", err.Error())
 	}
 
 	parameters := map[string]interface{}{
-		"ip_hit_waf": 0.001,
+		"h_total":        1000.00,
+		"h_total_max_2d": 0.00,
 	}
 	result, err := expression.Evaluate(parameters)
 	if err != nil {
@@ -72,11 +74,15 @@ func init() {
 	functions["F_field_days"] = func(args ...interface{}) (interface{}, error) {
 		var lvls []string
 
-		switch args[1].(type) {
+		switch t := args[1].(type) {
 		case []string:
 			lvls = append(lvls, args[1].([]string)...)
 		default:
+			fmt.Println("t:", t)
 		}
+
+		fmt.Println("args[5].(type):", reflect.TypeOf(args[5]))
+
 		fmt.Println("func: F_field_days")
 		fmt.Println("args:", args)
 		fmt.Println("args[0]:", args[0])
@@ -85,6 +91,7 @@ func init() {
 		fmt.Println("args[2]:", args[2])
 		fmt.Println("args[3]:", args[3])
 		fmt.Println("args[4]:", args[4])
+		fmt.Println("args[5]:", args[5].(bool))
 		length := len(args[0].(string))
 
 		return (float64)(length), nil
@@ -94,7 +101,7 @@ func init() {
 func test_function() error {
 
 	//eva F_field_score
-	expString := "F_field_days('ip_hit_waf',('L3', 'L2', 'L1'), (7,4,2), hoststat,fieldstat)"
+	expString := "F_field_days('ip_hit_waf',('L3', 'L2', 'L1'), (7,4,2), hoststat,fieldstat, true)"
 
 	expression, err := govaluate.NewEvaluableExpressionWithFunctions(expString, functions)
 	if err != nil {

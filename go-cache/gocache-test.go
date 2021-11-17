@@ -29,10 +29,9 @@ func main() {
 
 	//3. Get key
 	//&{map[h_disc_uri:30 h_total:50 t_4xx:5 t_5xx:1]}
-	s, found := c.Get(key)
+	s, expire, found := c.GetWithExpiration(key)
 	if found {
-		fmt.Println(s)
-
+		now := time.Now().Unix()
+		fmt.Println("s:", s, " expire:", expire.Unix(), " now:", now, " sub:", expire.Unix()-now)
 	}
-
 }
