@@ -25,3 +25,9 @@ func TestFibonacci(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkFibonacci(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Fibonacci(int64(i))
+	}
+}
