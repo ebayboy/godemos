@@ -9,11 +9,10 @@ import (
 	"github.com/Shopify/sarama"
 )
 
-var Address = []string{"localhost:9092"}
+var producerAddr = []string{"localhost:9092"}
 
 func main() {
-	syncProducer(Address)
-	//asyncProducer1(Address)
+	syncProducer(producerAddr)
 }
 
 //同步消息模式
@@ -29,7 +28,10 @@ func syncProducer(address []string) {
 	defer p.Close()
 	topic := "test"
 	srcValue := "sync: this is a message. index=%d"
-	for i := 0; i < 10; i++ {
+
+	i := 0
+	for {
+		i += 1
 		value := fmt.Sprintf(srcValue, i)
 		msg := &sarama.ProducerMessage{
 			Topic: topic,
