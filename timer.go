@@ -5,7 +5,12 @@ import (
 	"time"
 )
 
+//Timer：时间到了，执行只执行1次
+//Ticker：时间到了，多次执行
+
 func main() {
+	// Timer：时间到了，执行只执行1次
+
 	// 1. timer基本使用
 	/*
 		timer1 := time.NewTimer(time.Second * 2)
