@@ -2,23 +2,23 @@ package main
 
 import (
 	"fmt"
+	"runtime"
+	"sync"
 	"time"
 )
 
 //Timer：时间到了，执行只执行1次
 //Ticker：时间到了，多次执行
 
-func main() {
+func timerTest() {
 	// Timer：时间到了，执行只执行1次
 
 	// 1. timer基本使用
-	/*
-		timer1 := time.NewTimer(time.Second * 2)
-		t1 := time.Now()
-		fmt.Println("t1:", t1)
-		t2 := <-timer1.C
-		fmt.Println("t2:", t2)
-	*/
+	timer1 := time.NewTimer(time.Second * 2)
+	t1 := time.Now()
+	fmt.Println("t1:", t1)
+	t2 := <-timer1.C
+	fmt.Println("t2:", t2)
 
 	// 2. 验证timer只能响应一次
 	timer2 := time.NewTimer(time.Second * 1)
@@ -47,4 +47,28 @@ func main() {
 	timer5.Reset(time.Second * 1)
 	fmt.Println("now:", time.Now())
 	fmt.Println("now:", <-timer5.C)
+}
+
+//ticker : 多次执行
+func tickerTest() {
+	_, file, line, _ := runtime.Caller(0)
+	fmt.Printf("caller: %s:%d\n", file, line)
+
+	wg := sync.WaitGroup{}
+	ticker := time.NewTicker(time.Second * 2)
+
+	wg.Add(1)
+	go func() {
+		for i := 0; i < 5; i++ {
+			fmt.Println("ticker:", <-ticker.C)
+		}
+		ticker.Stop()
+		wg.Done()
+	}()
+	wg.Wait()
+}
+
+func main() {
+	timerTest()
+	tickerTest()
 }
