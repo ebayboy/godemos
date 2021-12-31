@@ -19,6 +19,7 @@ func main() {
 		fmt.Printf("Error:%v\n", err.Error())
 		return
 	}
+	defer listener.Close()
 
 	fmt.Println("Listen:", "127.0.0.1:20000")
 	for {
