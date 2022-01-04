@@ -7,7 +7,12 @@ import (
 	"net/rpc"
 )
 
-//例题：golang实现RPC程序，实现求矩形面积和周长
+/*
+golang官方的net/rpc库使用encoding/gob进行编解码，支持tcp和http数据传输方式，
+由于其他语言不支持gob编解码方式，
+所以golang的RPC只支持golang开发的服务器与客户端之间的交互
+*/
+
 /*
 golang写RPC程序，必须符合4个基本条件，不然RPC用不了
 + 结构体字段首字母要大写，可以别人调用 [done]
@@ -16,6 +21,7 @@ golang写RPC程序，必须符合4个基本条件，不然RPC用不了
 + 函数还必须有一个返回值error [注意]
 */
 
+//例题：golang实现RPC程序，实现求矩形面积和周长
 type Params struct {
 	Length int
 	Width  int
