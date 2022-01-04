@@ -9,6 +9,8 @@ import (
 	"go.etcd.io/etcd/client/v3/concurrency"
 )
 
+//基于etcd实现分布式锁
+
 func main() {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{"127.0.0.1:2379"},
