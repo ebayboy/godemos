@@ -26,3 +26,16 @@ message Test {
     Child child = 9;
     map<string, string> dict = 10;
 }
+
+//定义一个测试服务
+message Request {
+    string name = 1;
+}
+
+message Response {
+    string message = 1;
+}
+
+service TestService {
+    rpc Test(Request) returns (Response) {};
+}
