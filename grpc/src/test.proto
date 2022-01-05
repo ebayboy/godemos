@@ -5,7 +5,7 @@ package test;
 option go_package="/test";
 
 message Test {
-    int32 age=1;
+    int32 age=1; //等号后面的数字是序号
     int64 count=2;
     double money=3;
     float score=4;
