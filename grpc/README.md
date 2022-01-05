@@ -9,3 +9,6 @@
 + 上面安装好后，会在GOPATH/bin下生成protoc-gen-go.exe
 
 
+## 生成.proto文件
++ proto文件发生成(https://blog.csdn.net/weixin_43851310/article/details/115431651)
+
