@@ -17,7 +17,7 @@ const (
 
 func main() {
 
-	creds, err := credentials.NewClientTLSFromFile("../keys/server.pem", "server name")
+	creds, err := credentials.NewClientTLSFromFile("../../keys/server.pem", "JD Co. Ltd")
 	if err != nil {
 		grpclog.Fatalln(err)
 	}
