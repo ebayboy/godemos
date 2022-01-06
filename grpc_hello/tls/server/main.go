@@ -37,7 +37,7 @@ func main() {
 	}
 
 	// ## TLS认证 ##
-	creds, err := credentials.NewServerTLSFromFile("../../keys/server.pem", "../../keys/server.key")
+	creds, err := credentials.NewServerTLSFromFile("../../keys/example.com.cert", "../../keys/example.com.key")
 	if err != nil {
 		grpclog.Fatalf("Failed to generate credentials %v", err)
 	}
