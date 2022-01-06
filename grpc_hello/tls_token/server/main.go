@@ -8,6 +8,7 @@ import (
 	pb "github.com/godemos/grpc_hello/proto/hello"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -35,8 +36,14 @@ func main() {
 		grpclog.Fatalf("Failed to listen: %v", err)
 	}
 
-	//create rpc server
-	srv := grpc.NewServer()
+	// ## TLS认证 ##
+	creds, err := credentials.NewServerTLSFromFile("../../keys/example.com.cert", "../../keys/example.com.key")
+	if err != nil {
+		grpclog.Fatalf("Failed to generate credentials %v", err)
+	}
+
+	//create rpc server with TLS
+	srv := grpc.NewServer(grpc.Creds(creds))
 
 	//registe HelloService
 	pb.RegisterHelloServer(srv, HelloService)
