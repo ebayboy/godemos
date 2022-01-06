@@ -1,4 +1,0 @@
-
-# 利用　openssl　生成公钥私钥
-+ 生成公钥： openssl genrsa -out rsa_private_key.pem 1024
-+ 生成私钥: openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
