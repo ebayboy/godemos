@@ -8,7 +8,7 @@ package hello_http
 
 import (
 	context "context"
-	_ "github.com/godemos/grpc-gateway/proto/google/api"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
