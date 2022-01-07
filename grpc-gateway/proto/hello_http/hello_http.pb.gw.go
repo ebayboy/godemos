@@ -39,13 +39,17 @@ func request_HelloHTTP_SayHello_0(ctx context.Context, marshaler runtime.Marshal
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
 	if berr != nil {
+		grpclog.Errorln("request_HelloHTTP_SayHello_0 111 Error:", berr)
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
 	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		grpclog.Errorln("request_HelloHTTP_SayHello_0 222 Error:", err)
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
+	//TODO: failed
 	msg, err := client.SayHello(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	grpclog.Errorln("request_HelloHTTP_SayHello_0 333 Error:", err)
 	return msg, metadata, err
 
 }
@@ -74,6 +78,7 @@ func local_request_HelloHTTP_SayHello_0(ctx context.Context, marshaler runtime.M
 func RegisterHelloHTTPHandlerServer(ctx context.Context, mux *runtime.ServeMux, server HelloHTTPServer) error {
 
 	mux.Handle("POST", pattern_HelloHTTP_SayHello_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		grpclog.Println("RegisterHelloHTTPHandlerServer mux.Handle")
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -81,6 +86,7 @@ func RegisterHelloHTTPHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
 		if err != nil {
+			grpclog.Println("RegisterHelloHTTPHandlerServer err:", err)
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
@@ -88,6 +94,7 @@ func RegisterHelloHTTPHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
+			grpclog.Println("RegisterHelloHTTPHandlerServer err:", err)
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
@@ -104,6 +111,7 @@ func RegisterHelloHTTPHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 func RegisterHelloHTTPHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
+		grpclog.Errorln("RegisterHelloHTTPHandlerFromEndpoint:", err)
 		return err
 	}
 	defer func() {
@@ -127,6 +135,7 @@ func RegisterHelloHTTPHandlerFromEndpoint(ctx context.Context, mux *runtime.Serv
 // RegisterHelloHTTPHandler registers the http handlers for service HelloHTTP to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
 func RegisterHelloHTTPHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	grpclog.Println("RegisterHelloHTTPHandler...")
 	return RegisterHelloHTTPHandlerClient(ctx, mux, NewHelloHTTPClient(conn))
 }
 
@@ -138,17 +147,21 @@ func RegisterHelloHTTPHandler(ctx context.Context, mux *runtime.ServeMux, conn *
 func RegisterHelloHTTPHandlerClient(ctx context.Context, mux *runtime.ServeMux, client HelloHTTPClient) error {
 
 	mux.Handle("POST", pattern_HelloHTTP_SayHello_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		grpclog.Println("RegisterHelloHTTPHandlerClient mux.Handle...")
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		rctx, err := runtime.AnnotateContext(ctx, mux, req)
 		if err != nil {
+			grpclog.Errorln("runtime.AnnotateContext:", err)
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 		resp, md, err := request_HelloHTTP_SayHello_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
+			//TODO: 命中
+			grpclog.Errorln("request_HelloHTTP_SayHello_0 runtime.NewServerMetadataContext:", err)
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}

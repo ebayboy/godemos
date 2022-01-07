@@ -8,14 +8,16 @@ package hello_http
 
 import (
 	context "context"
+	reflect "reflect"
+	sync "sync"
+
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/grpclog"
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (
@@ -140,9 +142,9 @@ var file_hello_http_hello_http_proto_rawDesc = []byte{
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x5f, 0x68, 0x74,
 	0x74, 0x70, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x48, 0x54, 0x54, 0x50, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x18, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x12, 0x22, 0x0d, 0x2f, 0x65,
-	0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x65, 0x63, 0x68, 0x6f, 0x3a, 0x01, 0x2a, 0x42, 0x0e,
-	0x5a, 0x0c, 0x2e, 0x2f, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x5f, 0x68, 0x74, 0x74, 0x70, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x65, 0x63, 0x68, 0x6f, 0x3a, 0x01, 0x2a, 0x42, 0x0d,
+	0x5a, 0x0b, 0x2f, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x5f, 0x68, 0x74, 0x74, 0x70, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -247,10 +249,14 @@ func NewHelloHTTPClient(cc grpc.ClientConnInterface) HelloHTTPClient {
 	return &helloHTTPClient{cc}
 }
 
+//TODO: ERROR: err := c.cc.Invoke(ctx, "/hello_http.HelloHTTP/SayHello", in, out, opts...)
 func (c *helloHTTPClient) SayHello(ctx context.Context, in *HelloHTTPRequest, opts ...grpc.CallOption) (*HelloHTTPResponse, error) {
+	grpclog.Println("Enter helloHTTPClient.SayHello...")
 	out := new(HelloHTTPResponse)
 	err := c.cc.Invoke(ctx, "/hello_http.HelloHTTP/SayHello", in, out, opts...)
+	//TODO: invoke failed
 	if err != nil {
+		grpclog.Println("Error helloHTTPClient.SayHello..., ERROR:", err)
 		return nil, err
 	}
 	return out, nil
@@ -267,14 +273,19 @@ type UnimplementedHelloHTTPServer struct {
 }
 
 func (*UnimplementedHelloHTTPServer) SayHello(context.Context, *HelloHTTPRequest) (*HelloHTTPResponse, error) {
+	//没进来
+	grpclog.Println("## Enter: method SayHello not implemented ")
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
 
 func RegisterHelloHTTPServer(s *grpc.Server, srv HelloHTTPServer) {
+	grpclog.Println("注册服务:", _HelloHTTP_serviceDesc.ServiceName)
 	s.RegisterService(&_HelloHTTP_serviceDesc, srv)
 }
 
 func _HelloHTTP_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	//没进来
+	grpclog.Errorln("## _HelloHTTP_SayHello_Handler")
 	in := new(HelloHTTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -292,6 +303,7 @@ func _HelloHTTP_SayHello_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+//TODO: 注册的服务
 var _HelloHTTP_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "hello_http.HelloHTTP",
 	HandlerType: (*HelloHTTPServer)(nil),

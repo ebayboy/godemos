@@ -13,18 +13,18 @@ import (
 
 func main() {
 	ctx := context.Background()
-	ctx, cancle := context.WithCancel(ctx)
-	defer cancle()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 
-	//grpc服务地址
+	// grpc服务地址
 	endpoint := "127.0.0.1:8000"
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
-	//http转grpc
+	// HTTP转grpc
 	err := gw.RegisterHelloHTTPHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	if err != nil {
-		grpclog.Fatalf("RegisterHelloHTTPHandlerFromEndpoint error:%v", err.Error())
+		grpclog.Fatalf("Register handler err:%v\n", err)
 	}
 
 	grpclog.Println("HTTP Listen on 8080")

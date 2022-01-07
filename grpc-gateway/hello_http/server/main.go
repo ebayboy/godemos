@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/http"
 
-	pb "github.com/godemos/grpc-gateway/proto/hello"
+	pb "github.com/godemos/grpc-gateway/proto/hello_http"
 	"golang.org/x/net/trace"
 
 	"google.golang.org/grpc"
@@ -16,15 +16,17 @@ import (
 var Address string = "127.0.0.1:8000"
 
 // 定义helloService并实现约定的接口
-type helloService struct{}
+type helloHTTPService struct{}
 
 // HelloService Hello服务
-var HelloService = helloService{}
+var HelloHTTPService = helloHTTPService{}
 
 // SayHello 实现Hello服务接口
-func (h helloService) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
-	resp := new(pb.HelloResponse)
-	resp.Message = fmt.Sprintf("Hello %s.", in.Name)
+func (h helloHTTPService) SayHello(ctx context.Context, in *pb.HelloHTTPRequest) (*pb.HelloHTTPResponse, error) {
+	resp := new(pb.HelloHTTPResponse)
+	msg := fmt.Sprintf("Hello %s.", in.Name)
+	grpclog.Println("Send:", msg)
+	resp.Message = msg
 
 	return resp, nil
 }
@@ -44,7 +46,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// 注册HelloService
-	pb.RegisterHelloServer(s, HelloService)
+	pb.RegisterHelloHTTPServer(s, HelloHTTPService)
 
 	// 开启trace
 	go startTrace()
