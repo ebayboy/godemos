@@ -5,6 +5,7 @@ import (
 
 	pb "github.com/godemos/grpc-gateway/proto/hello_http"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -16,8 +17,13 @@ const (
 
 func main() {
 
+	creds, err := credentials.NewClientTLSFromFile("../../keys/example.com.cert", "www.example.com")
+	if err != nil {
+		grpclog.Fatalln(err)
+	}
+
 	//create grpc conn
-	conn, err := grpc.Dial(Address, grpc.WithInsecure())
+	conn, err := grpc.Dial(Address, grpc.WithTransportCredentials(creds))
 	if err != nil {
 		grpclog.Fatalln(err)
 	}

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
+	pb "github.com/godemos/grpc-gateway/proto/hello_http"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	pb "github.com/jergoo/go-grpc-example/proto/hello_http"
 	"golang.org/x/net/context"
 	"golang.org/x/net/http2"
 	"google.golang.org/grpc"
@@ -31,14 +31,14 @@ func (h helloHTTPService) SayHello(ctx context.Context, in *pb.HelloHTTPRequest)
 }
 
 func main() {
-	endpoint := "127.0.0.1:50052"
+	endpoint := "127.0.0.1:8000"
 	conn, err := net.Listen("tcp", endpoint)
 	if err != nil {
 		grpclog.Fatalf("TCP Listen err:%v\n", err)
 	}
 
 	// grpc tls server
-	creds, err := credentials.NewServerTLSFromFile("../../keys/server.pem", "../../keys/server.key")
+	creds, err := credentials.NewServerTLSFromFile("../../keys/example.com.cert", "../../keys/example.com.key")
 	if err != nil {
 		grpclog.Fatalf("Failed to create server TLS credentials %v", err)
 	}
@@ -47,11 +47,11 @@ func main() {
 
 	// gw server
 	ctx := context.Background()
-	dcreds, err := credentials.NewClientTLSFromFile("../../keys/server.pem", "server name")
+	dcreds, err := credentials.NewClientTLSFromFile("../../keys/example.com.cert", "www.example.com")
 	if err != nil {
 		grpclog.Fatalf("Failed to create client TLS credentials %v", err)
 	}
-	dopts := []grpc.DialOption{grpc.WithTransportCredentials(dcreds)}
+	dopts := []grpc.DialOption{grpc.WithTransportCredentials(dcreds)} //Dial opt with TLS
 	gwmux := runtime.NewServeMux()
 	if err = pb.RegisterHelloHTTPHandlerFromEndpoint(ctx, gwmux, endpoint, dopts); err != nil {
 		grpclog.Fatalf("Failed to register gw server: %v\n", err)
@@ -77,8 +77,8 @@ func main() {
 }
 
 func getTLSConfig() *tls.Config {
-	cert, _ := ioutil.ReadFile("../../keys/server.pem")
-	key, _ := ioutil.ReadFile("../../keys/server.key")
+	cert, _ := ioutil.ReadFile("../../keys/example.com.cert")
+	key, _ := ioutil.ReadFile("../../keys/example.com.key")
 	var demoKeyPair *tls.Certificate
 	pair, err := tls.X509KeyPair(cert, key)
 	if err != nil {
