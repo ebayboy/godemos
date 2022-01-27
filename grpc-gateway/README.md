@@ -1,0 +1,3 @@
+
+grpc是基于http2实现的;
+grpcHandlerFunc中检测请求头信息，决定是直接调用gRPC服务，还是使用gateway的HTTP服务。

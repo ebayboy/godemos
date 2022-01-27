@@ -22,7 +22,7 @@ type helloHTTPService struct{}
 // HelloHTTPService Hello HTTP服务
 var HelloHTTPService = helloHTTPService{}
 
-// SayHello 实现Hello服务接口
+// 实现proto的SayHello服务接口
 func (h helloHTTPService) SayHello(ctx context.Context, in *pb.HelloHTTPRequest) (*pb.HelloHTTPResponse, error) {
 	resp := new(pb.HelloHTTPResponse)
 	resp.Message = "Hello " + in.Name + "."
@@ -31,6 +31,7 @@ func (h helloHTTPService) SayHello(ctx context.Context, in *pb.HelloHTTPRequest)
 }
 
 func main() {
+
 	endpoint := "127.0.0.1:8000"
 	conn, err := net.Listen("tcp", endpoint)
 	if err != nil {
@@ -43,9 +44,11 @@ func main() {
 		grpclog.Fatalf("Failed to create server TLS credentials %v", err)
 	}
 	grpcServer := grpc.NewServer(grpc.Creds(creds))
+	//注册protobuf 服务
 	pb.RegisterHelloHTTPServer(grpcServer, HelloHTTPService)
 
 	// gw server
+	// ./proto/hello_http/hello_http.pb.gw.go
 	ctx := context.Background()
 	dcreds, err := credentials.NewClientTLSFromFile("../../keys/example.com.cert", "www.example.com")
 	if err != nil {
@@ -57,18 +60,16 @@ func main() {
 		grpclog.Fatalf("Failed to register gw server: %v\n", err)
 	}
 
-	// http服务
+	// 根服务路由
 	mux := http.NewServeMux()
 	mux.Handle("/", gwmux)
 
+	grpclog.Infof("gRPC and https listen on: %s\n", endpoint)
 	srv := &http.Server{
 		Addr:      endpoint,
 		Handler:   grpcHandlerFunc(grpcServer, mux),
 		TLSConfig: getTLSConfig(),
 	}
-
-	grpclog.Infof("gRPC and https listen on: %s\n", endpoint)
-
 	if err = srv.Serve(tls.NewListener(conn, srv.TLSConfig)); err != nil {
 		grpclog.Fatal("ListenAndServe: ", err)
 	}
