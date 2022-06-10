@@ -1,14 +1,18 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
-func main() {
+func sendReques() {
 
 	//Method
 	method := http.MethodPost
@@ -47,4 +51,57 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("resp body:", string(body), " code:", resp.StatusCode)
+}
+
+func readLogs() error {
+
+	of, err := os.Open("./waf.log")
+	if err != nil {
+		return err
+	}
+
+	bio_reader := bufio.NewReader(of)
+	for {
+		line, err := bio_reader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				return nil
+			}
+			return err
+		}
+		log.Println("line:", line)
+	}
+}
+
+func loadConf() ([]string, error) {
+	confName := "access_log.conf"
+	conf, err := ioutil.ReadFile(confName)
+	if err != nil {
+		return nil, err
+	}
+
+	fields := strings.Split(string(conf), "\n")
+	if fields[len(fields)-1] == "" {
+		fields = fields[:len(fields)-1]
+	}
+	log.Printf("lend:%d fields:%v last:[%s]", len(fields), fields, fields[len(fields)-1])
+
+	return fields, nil
+}
+
+func main() {
+	fields, err := loadConf()
+	if err != nil {
+		log.Panic("err:", err.Error())
+	}
+
+	for k, v := range fields {
+		fmt.Println(k, ":", v)
+	}
+
+	if err := readLogs(); err != nil {
+		log.Panic("err:", err.Error())
+	}
+
+	//sendReques()
 }
