@@ -120,8 +120,13 @@ func main() {
 	filename := "gob.bin"
 	IPThreatLRUCache, err := lru.New(3)
 	log.Println(IPThreatLRUCache, err)
-	IPThreatLRUCache.Add("1.1.1.1", []float64{1, 507})
+
+	if eviled := IPThreatLRUCache.Add("1.1.1.1", []float64{1, 507}); !ok {
+		log.Println("ok:", ok)
+	}
 	IPThreatLRUCache.Add("2.2.2.2", []float64{0, 998})
+
+	return
 
 	if err := saveGobFile(IPThreatLRUCache, filename); err != nil {
 		log.Println("Error: ", err.Error())
