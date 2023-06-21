@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
@@ -11,7 +12,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", "0.0.0.0:8000", "http service address")
+var addr = flag.String("addr", "10.226.133.8:28080", "http service address")
 
 func main() {
 	flag.Parse()
@@ -22,11 +23,20 @@ func main() {
 
 	//websocket的schema是ws, 例如:  ws://127.0.0.1:8000/
 	//url: ws://127.0.0.1:8000/echo
+
+	//code=$(curl -o /dev/null -s -w %{http_code} ${server} -H"x-cg-id: ${cgid}" -H'x-org-host: 127.0.0.1:18080' -H'x-org-scheme: http')
+
 	urlStr := url.URL{Scheme: "ws", Host: *addr, Path: "/echo"}
 	log.Printf("connecting to %s", urlStr.String())
 
 	//Dial
-	conn, _, err := websocket.DefaultDialer.Dial(urlStr.String(), nil)
+	//curl http://10.226.133.8:28080 -H'x-cg-id: cg-llm8mksvcd' https://www.baidu.com/ RespCode:200
+	reqHeader := http.Header{
+		"x-cg-id":      []string{"cg-llm8mksvcd"},
+		"x-org-host":   []string{"127.0.0.1:8000"},
+		"x-org-scheme": []string{"http"},
+	}
+	conn, _, err := websocket.DefaultDialer.Dial(urlStr.String(), reqHeader)
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
