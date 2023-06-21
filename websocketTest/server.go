@@ -32,13 +32,32 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			log.Println("read:", err)
 			break
 		}
-		log.Printf("recv: %s", message)
+		log.Printf("recv: %s mt:%v", message, mt)
 		err = conn.WriteMessage(mt, message)
 		if err != nil {
 			log.Println("write:", err)
 			break
 		}
 	}
+}
+
+func echo_once(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("====Enter echo_once ...")
+	fmt.Printf("request:[%v]\n", *r)
+
+	//update http to websocket
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Print("upgrade:", err)
+		return
+	}
+
+	err = conn.WriteMessage(websocket.TextMessage, []byte("hello"))
+	if err != nil {
+		log.Println("write:", err)
+	}
+	conn.Close()
 }
 
 func main() {
@@ -55,6 +74,7 @@ func main() {
 	//所以到echo的是http,进入echo函数内部会将http请求升级为websocket请求
 
 	http.HandleFunc("/echo", echo)
+	http.HandleFunc("/echo_once", echo_once)
 
 	//开启http监听
 	fmt.Println("http.ListenAndServe:", *srvAddr)

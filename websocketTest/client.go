@@ -12,9 +12,11 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", "10.226.133.8:28080", "http service address")
+var addr = flag.String("addr", "10.226.133.8:28080", "http service address") // 长连接，交互数据
+var path = flag.String("path", "/echo", "/echo or /echo_once")               //server应答一次，关闭连接
 
 func main() {
+
 	flag.Parse()
 	log.SetFlags(0)
 
@@ -26,7 +28,7 @@ func main() {
 
 	//code=$(curl -o /dev/null -s -w %{http_code} ${server} -H"x-cg-id: ${cgid}" -H'x-org-host: 127.0.0.1:18080' -H'x-org-scheme: http')
 
-	urlStr := url.URL{Scheme: "ws", Host: *addr, Path: "/echo"}
+	urlStr := url.URL{Scheme: "ws", Host: *addr, Path: *path}
 	log.Printf("connecting to %s", urlStr.String())
 
 	//Dial
