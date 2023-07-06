@@ -8,8 +8,8 @@
 #   "x-org-scheme": []string{"http"},
 
 # curl http://10.226.133.8:28080 -H'x-cg-id: cg-llm8mksvcd' https://www.baidu.com/ RespCode:200
-#HOST="http://0.0.0.0:18000"
-HOST="http://10.226.133.8:28080"
+HOST="http://0.0.0.0:18000"
+#HOST="http://10.226.133.8:28080"
 ORGHOST="0.0.0.0:8000"
 #ORGHOST="www.baidu.com"
 
