@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -32,12 +33,15 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			log.Println("read:", err)
 			break
 		}
+		mt := 1
+		message := []byte(`{"ADD":[{"baidu":{"shunt":[".baidu.com"]}}],"SET":[{"baidu":{"skip":["img.baidu.com/abc/*"],"shunt":["img.baidu.com"]}}],"DEL":[{"baidu":{"shunt":["img.baidu.com"]}}],"GET":"ALL","userID":"uID02","insID":"test_02"}`)
 		log.Printf("recv: %s mt:%v", message, mt)
 		err = conn.WriteMessage(mt, message)
 		if err != nil {
 			log.Println("write:", err)
 			break
 		}
+		time.Sleep(time.Second * 5)
 	}
 }
 

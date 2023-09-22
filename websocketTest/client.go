@@ -12,8 +12,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", "10.226.133.8:28080", "http service address") // 长连接，交互数据
-var path = flag.String("path", "/echo", "/echo or /echo_once")               //server应答一次，关闭连接
+var addr = flag.String("addr", "0.0.0.0:8000", "http service address") // 长连接，交互数据
+var path = flag.String("path", "/echo", "/echo or /echo_once")         //server应答一次，关闭连接
 
 func main() {
 
