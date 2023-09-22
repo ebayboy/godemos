@@ -10,9 +10,35 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var srvAddr = flag.String("srvAddr", "0.0.0.0:8000", "http service srvAddress")
+var srvAddr = flag.String("srvAddr", "0.0.0.0:9090", "http service srvAddress")
 
 var upgrader = websocket.Upgrader{} // use default options
+
+// 重点关注函数
+func localFilter(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("====Enter /v1/user/filter ...")
+	fmt.Printf("request:[%v]\n", *r)
+
+	//update http to websocket
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Print("upgrade:", err)
+		return
+	}
+	defer conn.Close()
+	for {
+		mt := 1
+		message := []byte(`{"ADD":[{"baidu":{"shunt":[".baidu.com"]}}],"SET":[{"baidu":{"skip":["img.baidu.com/abc/*"],"shunt":["img.baidu.com"]}}],"DEL":[{"baidu":{"shunt":["img.baidu.com"]}}],"GET":"ALL","userID":"uID02","insID":"test_02"}`)
+		log.Printf("recv: %s mt:%v", message, mt)
+		err = conn.WriteMessage(mt, message)
+		if err != nil {
+			log.Println("write:", err)
+			break
+		}
+		time.Sleep(time.Second * 5)
+	}
+}
 
 // 重点关注函数
 func echo(w http.ResponseWriter, r *http.Request) {
@@ -33,8 +59,10 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			log.Println("read:", err)
 			break
 		}
-		mt := 1
-		message := []byte(`{"ADD":[{"baidu":{"shunt":[".baidu.com"]}}],"SET":[{"baidu":{"skip":["img.baidu.com/abc/*"],"shunt":["img.baidu.com"]}}],"DEL":[{"baidu":{"shunt":["img.baidu.com"]}}],"GET":"ALL","userID":"uID02","insID":"test_02"}`)
+		/*
+			mt := 1
+			message := []byte(`{"ADD":[{"baidu":{"shunt":[".baidu.com"]}}],"SET":[{"baidu":{"skip":["img.baidu.com/abc/*"],"shunt":["img.baidu.com"]}}],"DEL":[{"baidu":{"shunt":["img.baidu.com"]}}],"GET":"ALL","userID":"uID02","insID":"test_02"}`)
+		*/
 		log.Printf("recv: %s mt:%v", message, mt)
 		err = conn.WriteMessage(mt, message)
 		if err != nil {
@@ -79,6 +107,7 @@ func main() {
 
 	http.HandleFunc("/echo", echo)
 	http.HandleFunc("/echo_once", echo_once)
+	http.HandleFunc("/v1/user/filter", localFilter)
 
 	//开启http监听
 	fmt.Println("http.ListenAndServe:", *srvAddr)

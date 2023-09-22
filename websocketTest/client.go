@@ -12,8 +12,9 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", "0.0.0.0:8000", "http service address") // 长连接，交互数据
-var path = flag.String("path", "/echo", "/echo or /echo_once")         //server应答一次，关闭连接
+var addr = flag.String("addr", "0.0.0.0:9090", "http service address") // 长连接，交互数据
+// var path = flag.String("path", "/echo", "/echo or /echo_once")         //server应答一次，关闭连接
+var path = flag.String("path", "/v1/user/filter", "") //server应答一次，关闭连接
 
 func main() {
 
@@ -35,7 +36,7 @@ func main() {
 	//curl http://10.226.133.8:28080 -H'x-cg-id: cg-llm8mksvcd' https://www.baidu.com/ RespCode:200
 	reqHeader := http.Header{
 		"x-cg-id":      []string{"cg-llm8mksvcd"},
-		"x-org-host":   []string{"127.0.0.1:8000"},
+		"x-org-host":   []string{"127.0.0.1:9090"},
 		"x-org-scheme": []string{"http"},
 	}
 	conn, _, err := websocket.DefaultDialer.Dial(urlStr.String(), reqHeader)
