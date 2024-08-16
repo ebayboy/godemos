@@ -4,7 +4,7 @@
 + 使用客户端请求，client与server循环回显  
 + 使用curl请求: 鉴于curl无法主动发送， 接收回显数据， 会一直block
 ```
-+ curl http://localhost:8000/echo -H 'Upgrade: websocket' -H 'Connection: Upgrade' -H 'Sec-WebSocket-Version: 13' -H 'Sec-webSocket-Key: eeZn6lg/rOu8QbKwltqHDA==' --verbose
++ curl http://localhost:9090/echo -H 'Upgrade: websocket' -H 'Connection: Upgrade' -H 'Sec-WebSocket-Version: 13' -H 'Sec-webSocket-Key: eeZn6lg/rOu8QbKwltqHDA==' --verbose
 * Uses proxy env variable no_proxy == '127.0.0.1,localhost'
 *   Trying 127.0.0.1:8000...
 * Connected to localhost (127.0.0.1) port 8000 (#0)
@@ -28,7 +28,7 @@
 ## server的 echo_once方法
 可以使用curl请求， curl server /echo_once， server直接返回内容，close连接
 ```
-+ curl http://localhost:8000/echo_once -H 'Upgrade: websocket' -H 'Connection: Upgrade' -H 'Sec-WebSocket-Version: 13' -H 'Sec-webSocket-Key: eeZn6lg/rOu8QbKwltqHDA==' --verbose
++ curl http://localhost:9090/echo_once -H 'Upgrade: websocket' -H 'Connection: Upgrade' -H 'Sec-WebSocket-Version: 13' -H 'Sec-webSocket-Key: eeZn6lg/rOu8QbKwltqHDA==' --verbose
 * Uses proxy env variable no_proxy == '127.0.0.1,localhost'
 *   Trying 127.0.0.1:8000...
 * Connected to localhost (127.0.0.1) port 8000 (#0)
